@@ -1,0 +1,12 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Montserrat, MontserratV2, Verdana, arial, sans-serif;
+}
+html{
+    scroll-behavior: smooth;
+}
+body{
+    width:100vw;
+}
