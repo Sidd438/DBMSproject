@@ -13,6 +13,8 @@ def get_flight_data(queryset):
             "source":flight.source,
             "destination":flight.destination,
             "start_time":flight.start_time,
+            "end_time":flight.end_time,
+            "price":flight.price,
         }
         data.append(data_small)
     return data
@@ -57,6 +59,8 @@ def get_single_booking_data(booking):
 def FlightListView(request):
     if(request.method.lower() == "post"):
         current_user = authenticate(email=request.POST.get("name"), password=request.POST.get("password"))
+        if not current_user:
+            return redirect("login")
         print(request.user)
     flights = Flight.objects.all()
     return render(request, "flightlist.html", context={"data":flights})

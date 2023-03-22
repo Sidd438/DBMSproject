@@ -12,6 +12,8 @@ BOOKING_STATUS_CHOICES = [
 class Flight(models.Model):
     name = models.CharField(max_length=100)
     start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    price = models.IntegerField()
     source = models.CharField(max_length=100)
     destination = models.CharField(max_length=100)
 

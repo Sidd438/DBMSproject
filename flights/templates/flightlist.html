@@ -20,7 +20,7 @@
     {% for flight in data %}
     <form method="get" action="seats/">
          <input type="hidden" name="flight_id" value={{flight.id}} /> 
-    <h5>{{flight.name}}--{{flight.source}}--{{flight.destination}}--{{flight.start_time}}</h5>
+    <h5>{{flight.name}}--{{flight.source}}--{{flight.destination}}--{{flight.start_time}}--{{flight.end_time}}--{{flight.price}}</h5>
     <input type="submit" value="See Seats" />
     </form>
     {% endfor %}
