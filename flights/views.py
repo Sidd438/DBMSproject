@@ -125,5 +125,5 @@ def GetBookingView(request):
         booking.save()
         cancellation = Cancellation.objects.create(booking=booking, reason=request.POST.get('cancel_reason'))
     else:
-        booking = Booking.objects.get(seat_id=int(request.GET.get('seat_id')[:-1]), user=request.user)
+        booking = Booking.objects.get(seat_id=int(request.GET.get('seat_id')), user=request.user)
     return render(request, "booking.html", context={"booking":get_single_booking_data(booking)})
