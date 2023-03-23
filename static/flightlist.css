@@ -1,0 +1,74 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+.flightbox{
+    border:1px solid black;
+    display: flex;
+    width:80%;
+    font-family: 'Roboto', sans-serif;
+    border-radius: 25px;
+    height: 100px;
+    margin-left: 10%;
+    margin-top: 20px;
+}
+.box1{
+    width:15%;
+    color:white;
+    background-color: rgb(100, 153, 205);
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+}
+.box2{
+    width:55%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    margin-left: 10px;
+    margin-right:10px;
+}
+.side2{
+    margin-left: 10px;
+    margin-right:10px;
+}
+.box3{
+    width:15%;
+    color:white;
+    background-color: red;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+.box4{
+    width:15%;
+    color:white;
+    background-color:orange;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    text-decoration: bold;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+}
+.box4 input{
+    background-color: transparent;
+    border:0px solid black;
+    color:white;
+    /* text-decoration: line-through; */
+    font-weight: bold;
+    /* font-size: 18px; */
+}
+.destination{
+    text-transform: uppercase;
+    margin-top:5px;
+    margin-bottom: 5px;
+}
+.source{
+    text-transform: uppercase;
+    margin-top:5px;
+    margin-bottom: 5px;
+}

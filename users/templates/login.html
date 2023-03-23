@@ -6,31 +6,49 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="{% static 'login.css' %}" type="text/css" rel="Stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat&family=Roboto:wght@900&display=swap"
+      rel="stylesheet"
+    />
     <title>Passenger Login</title>
   </head>
   <body>
-    <h1>Passenger Login</h1>
-    <form method="POST" action="../../flights/">
-      {% csrf_token %}
-      <div>
-        <label for="staticEmail">Email</label>
-        <div class="col-sm-10">
-          <input
-            type="email"
-            name="name"
-            class="form-control"
-            id="staticEmail"
-          />
-        </div>
+    <div class="commondiv">
+      <div class="heading">
+        <p><b>Passenger Login</b></p>
       </div>
-      <div>
-        <label for="inputPassword">Password</label>
-        <div>
-          <input type="password" name="password" id="inputPassword" />
-        </div>
+      <div class="formbody">
+        <form method="POST" action="../../flights/">
+          {% csrf_token %}
+          <div class="email">
+            <label for="staticEmail" class="lab"><b>Email:</b></label>
+            <div>
+              <input
+                type="email"
+                name="name"
+                class="form-control"
+                id="staticEmail"
+                placeholder="Enter your email ID"
+              />
+            </div>
+          </div>
+          <div class="pwd">
+            <label for="inputPassword" class="lab"><b>Password:</b></label>
+            <div>
+              <input
+                type="password"
+                name="password"
+                id="inputPassword"
+                placeholder="Enter your password"
+              />
+            </div>
+          </div>
+          <center><button class="login_button">Login</button></center>
+        </form>
       </div>
-      <button>login</button>
-    </form>
+    </div>
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
