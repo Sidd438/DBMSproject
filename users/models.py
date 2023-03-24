@@ -41,6 +41,7 @@ class Passenger(AbstractUser):
         ('NB','Non-Binary')
     )
     username=None
+    password = models.CharField(max_length=100)
     email = models.EmailField(_('email address'), unique=True)
     date_of_birth = models.DateField(blank=True,null=True)
     gender = models.CharField(_('gender'),max_length=2, choices=GENDER_CHOICES)

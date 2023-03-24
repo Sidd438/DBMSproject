@@ -58,12 +58,17 @@ def get_single_booking_data(booking):
 
 def FlightListView(request):
     if(request.method.lower() == "post"):
-        current_user = authenticate(email=request.POST.get("name"), password=request.POST.get("password"))
+        current_user = UserC.objects.get(email=request.POST.get("name"), password=request.POST.get("password"))
         if not current_user:
             return redirect("login")
-        print(request.user)
+        request.user = current_user
     flights = Flight.objects.all()
-    return render(request, "flightlist.html", context={"data":flights})
+    if request.method == "GET":
+        if request.GET.get('source'):
+            flights = flights.filter(source__icontains=request.GET.get('source'))
+        if request.GET.get('destination'):
+            flights = flights.filter(destination__icontains=request.GET.get('destination'))
+    return render(request, "flightlist.html", context={"data":flights, "destination":request.GET.get('destination'), "source":request.GET.get('source')})
 
 
 def GetSeatListView(request):
@@ -121,7 +126,9 @@ def GetBookingView(request):
         print(request.POST)
         booking = Booking.objects.get(seat_id=int(request.POST.get('seat_id')), user=request.user)
         booking.status = "Confirmed"
+        paynment = Payment.objects.create(booking=booking, user=request.user)
         booking.save()
+
     elif request.method=="POST" and request.POST.get('status') == "cancel":
         print(request.POST)
         booking = Booking.objects.get(seat_id=int(request.POST.get('seat_id')), user=request.user)

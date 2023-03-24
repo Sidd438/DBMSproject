@@ -39,6 +39,12 @@ class Booking(models.Model):
         unique_together = ["seat", "user"]
 
 
+class Payment(models.Model):
+    booking = models.ForeignKey(Booking, on_delete=models.CASCADE, related_name="payments")
+    user = models.ForeignKey(UserC, related_name="payments", on_delete=models.CASCADE)
+
+
+
 class Cancellation(models.Model):
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE, related_name="cancellations")
     created_at = models.DateTimeField(auto_now_add=True)
