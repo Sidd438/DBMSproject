@@ -68,8 +68,16 @@ def FlightListView(request):
         current_user = UserC.objects.filter(email=request.POST.get("name"), password=request.POST.get("password")).first()
         if not current_user:
             return redirect("login")
-        request.user = current_user
+        login(request, current_user)
+        # request.user = current_user
     flights = Flight.objects.all()
+    if request.method == "GET":
+        if request.GET.get('source'):
+            flights = flights.filter(source__icontains=request.GET.get('source'))
+        if request.GET.get('destination'):
+            flights = flights.filter(destination__icontains=request.GET.get('destination'))
+        if request.GET.get('start_time'):
+            flights = flights.filter(start_time__date=request.GET.get('start_time'))
     return render(request, "flightlist.html", context={"data":flights, "destination":request.GET.get('destination'), "source":request.GET.get('source')})
 
 
@@ -78,13 +86,6 @@ def SearchFlightView(request):
         return redirect("login")
     flights = Flight.objects.all()
     print(request.GET)
-    if request.method == "GET":
-        if request.GET.get('source'):
-            flights = flights.filter(source__icontains=request.GET.get('source'))
-        if request.GET.get('destination'):
-            flights = flights.filter(destination__icontains=request.GET.get('destination'))
-        if request.GET.get('start_time'):
-            flights = flights.filter(start_time__date=request.GET.get('start_time'))
     return render(request, "searchbox.html", context={"data":flights, "destination":request.POST.get('destination'), "source":request.POST.get('source')})
 
 
@@ -92,6 +93,7 @@ def GetSeatListView(request):
     if not request.user:
         return redirect("login")
     already=False
+    print(request.user)
     if request.method=="POST":
         seat = Seat.objects.get(id=request.POST.get('seat_id'))
         if Booking.objects.filter(seat=seat).exclude(status="Completed").exclude(status="Cancelled").exists():

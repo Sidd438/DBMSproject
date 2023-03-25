@@ -20,23 +20,13 @@
   </head>
   <body>
     <div class="searchbox">
-      <div class="search_heading">Flight Search</div>
-      <div class="search_form">
-        <form action="." method="get">
-          <div class="search">
-            <div class="search1">
-              <div id="source" class="formelem">
-                <label for="source">Source</label>
-                <input type="text" name="source" id="source" />
-              </div>
-              <div id="destination" class="formelem">
-                <label for="destination">Destination</label>
-                <input type="text" name="destination" id="destination" />
-              </div>
-              <div class="formelem">
-                <label for="date">Date</label>
-                <input type="date" name="start_time" id="date" />
-              </div>
+      <h2>Search</h2>
+      <form action="/flights/" method="get">
+        <div class="search">
+          <div class="search1">
+            <div class="source">
+              <label for="source">Source</label>
+              <input type="text" name="source" id="source" />
             </div>
             <div class="search2">
               {% comment %}
