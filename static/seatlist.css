@@ -55,3 +55,6 @@ input[value="Book Seat"]{
     color:rgb(52, 172, 9);
     /* background-color: red; */
 }
+.margin{
+    margin-left:30px;
+}

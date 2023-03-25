@@ -10,24 +10,37 @@
   </head>
 
   <body>
-    <h5>{{ booking.seat }}--{{ booking.status }}</h5>
-    {% if booking.status == "Pending" %}
-    <form action="." method="post">
-      {% csrf_token %}
-      <input type="hidden" name="seat_id" value="{{ booking.seat_id }}" />
-      <input type="hidden" name="booking_id" value="{{ booking.id }}" />
-      <input type="hidden" name="status" value="confirm" />
-      <input type="submit" value="Confirm Booking" />
-    </form>
-    <form action="." method="post">
-      {% csrf_token %}
-      <input type="hidden" name="seat_id" value="{{ booking.seat_id }}" />
-      <input type="hidden" name="booking_id" value="{{ booking.id }}" />
-      <input type="hidden" name="status" value="cancel" />
-      <input type="input" name="cancel_reason" value=""/>
-      <input type="submit" value="Cancel Booking" />
-    </form>
-    {% endif %}
+    <div class="big">
+      <div class="header">Confirm Booking</div>
+      <h5 class="orange">{{ booking.seat }}--{{ booking.status }}</h5>
+      {% if booking.status == "Pending" %}
+      <form action="." method="post">
+        {% csrf_token %}
+        <input type="hidden" name="seat_id" value="{{ booking.seat_id }}" />
+        <input type="hidden" name="booking_id" value="{{ booking.id }}" />
+        <input type="hidden" name="status" value="confirm" />
+        <center>
+          <input type="submit" value="Confirm Booking" />
+        </center>
+      </form>
+      <hr />
+      <form action="." method="post">
+        {% csrf_token %}
+        <input type="hidden" name="seat_id" value="{{ booking.seat_id }}" />
+        <input type="hidden" name="booking_id" value="{{ booking.id }}" />
+        <input type="hidden" name="status" value="cancel" />
+        <input
+          type="input"
+          name="cancel_reason"
+          value=""
+          placeholder="Please enter the cancel reason"
+        /><br />
+        <center>
+          <input type="submit" value="Cancel Booking" />
+        </center>
+      </form>
+      {% endif %}
+    </div>
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->

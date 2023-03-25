@@ -3,3 +3,62 @@
     padding:0;
     box-sizing:border-box;
 }
+html{
+    background-image: linear-gradient(
+      rgb(25, 183, 197, 0.9),
+      rgb(98, 233, 86, 0.8)
+    );
+    background-attachment: fixed;
+    background-size: cover;
+    scroll-behavior: smooth;
+}
+.header{
+    background-image: linear-gradient(90deg, rgb(117, 6, 221), rgb(21, 197, 241));
+    color:white;
+    font-family: 'Alkatra', cursive;
+    font-size: 40px;
+    font-weight: 900;
+    text-align: center;
+}
+.big{
+    width:80vw;
+    height:70vh;
+    background-color: white;
+    margin-left:10vw;
+    margin-top: 15vh;
+}
+.orange{
+    color:orange;
+    font-size: 30px;
+    text-align: center;
+    margin-top:20px;
+    text-decoration: underline;
+}
+input[value="Confirm Booking"]{
+    background-image: linear-gradient(90deg, rgb(117, 6, 221), rgb(21, 197, 241));
+    color:white;
+    font-family: 'Roboto';
+    font-size: 20px;
+    font-weight: 900;
+    text-align: center;
+    padding:10px 30px;
+    margin-top:40px;
+    margin-bottom: 40px;
+}
+input[name="cancel_reason"]{
+    width:90%;
+    margin-top:90px;
+    padding:2px 5px;
+    margin-left:5%;
+    font-size: 18px;
+}
+input[value="Cancel Booking"]{
+    background-image: linear-gradient(90deg, rgb(117, 6, 221), rgb(21, 197, 241));
+    color:red;
+    font-family: 'Roboto';
+    font-size: 20px;
+    font-weight: 900;
+    text-align: center;
+    padding:10px 30px;
+    margin-top:40px;
+}

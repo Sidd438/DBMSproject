@@ -26,6 +26,7 @@
         <div class="seat">{{seat.name}}</div>
       </div>
       <h6 class="bookedbyyou">Booked By You</h6>
+      <h6 class="margin">Status -- {{seat.status}}</h6>
       <form method="get" action="/flights/booking/">
         <input type="hidden" name="seat_id" value="{{seat.id}}" />
         <input type="hidden" name="booking_id" value="{{seat.booking_id}}" />
