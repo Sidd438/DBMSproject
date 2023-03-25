@@ -58,7 +58,7 @@ def get_single_booking_data(booking):
 
 def FlightListView(request):
     if(request.method.lower() == "post"):
-        current_user = UserC.objects.get(email=request.POST.get("name"), password=request.POST.get("password"))
+        current_user = UserC.objects.filter(email=request.POST.get("name"), password=request.POST.get("password")).first()
         if not current_user:
             return redirect("login")
         request.user = current_user
