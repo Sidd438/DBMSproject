@@ -21,34 +21,7 @@
   </head>
 
   <body>
-    <h2>Search</h2>
-    <form action="." method="get">
-      <div class="search">
-        <div class="search1">
-          <div class="source">
-            <label for="source">Source</label>
-            <input type="text" name="source" id="source"/>
-          </div>
-          <div class="destination">
-            <label for="destination">Destination</label>
-            <input type="text" name="destination" id="destination"/>
-          </div>
-          <div>
-            <label for="date">Date</label>
-            <input type="date" name="start_time" id="date" />
-          </div>
-        </div>
-        <div class="search2">
-          {% comment %} <div class="date">
-            <label for="date">Date</label>
-            <input type="date" name="date" id="date" />
-          </div> {% endcomment %}
-          <div class="searchbutton">
-            <input type="submit" value="Search" />
-          </div>
-        </div>
-      </div>
-    </form>
+    
     {% for flight in data %}
     <form method="get" action="seats/">
       <input type="hidden" name="flight_id" value="{{flight.id}}" />
