@@ -10,10 +10,11 @@ def login(request):
 
 def reqistration(request):
     if request.method == "POST":
-        email = request.POST["name"]
+        email = request.POST["email"]
+        name = request.POST["name"]
         password = request.POST["password"]
-
-        user = User.objects.create(email=email, password=password)
+        dob = request.POST["date"]
+        user = User.objects.create(email=email, password=password, name=name, date_of_birth=dob)
         user.save()
         return redirect("login")
     return render(request, "registration.html")

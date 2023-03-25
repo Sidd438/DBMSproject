@@ -27,6 +27,9 @@ class Seat(models.Model):
     name = models.CharField(max_length=100)
     flight = models.ForeignKey(Flight, on_delete=models.CASCADE, related_name="seats")
 
+    class Meta:
+        unique_together = ["name", "flight"]
+
 
 
 class Booking(models.Model):
@@ -35,8 +38,8 @@ class Booking(models.Model):
     user = models.ForeignKey(UserC, related_name="Bookings", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
-        unique_together = ["seat", "user"]
+    # class Meta:
+    #     unique_together = ["seat", "user"]
 
 
 class Payment(models.Model):

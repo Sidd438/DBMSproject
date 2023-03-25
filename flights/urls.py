@@ -9,6 +9,6 @@ urlpatterns = [
     path('bookings/', BookingListView, name="bookinglist"),
     path('booking/', GetBookingView, name="bookingView"),
     path('cancel/', CancelBookingView, name="cancel"),
-    
+    path('search/', SearchFlightView, name='search')
     
 ]

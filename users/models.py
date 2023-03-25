@@ -45,6 +45,7 @@ class Passenger(AbstractUser):
     email = models.EmailField(_('email address'), unique=True)
     date_of_birth = models.DateField(blank=True,null=True)
     gender = models.CharField(_('gender'),max_length=2, choices=GENDER_CHOICES)
+    name = models.CharField(max_length=100)
     expense = models.IntegerField(default=0)
     is_superuser = models.BooleanField(_('superuser status'),default=False)
     USERNAME_FIELD = 'email'

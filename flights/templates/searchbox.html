@@ -45,5 +45,28 @@
         </div>
       </form>
     </div>
+    {% for flight in data %}
+    <form method="get" action="seats/">
+      <input type="hidden" name="flight_id" value="{{flight.id}}" />
+      <div class="flightbox">
+        <div class="box1">{{flight.name}}</div>
+        <div class="box2">
+          <div class="side1">
+            <div class="time">{{flight.start_time}}</div>
+            <div class="source">{{flight.source}}</div>
+          </div>
+          <div class="side2">---------------------------------------</div>
+          <div class="side3">
+            <div class="end_time">{{flight.end_time}}</div>
+            <div class="destination">{{flight.destination}}</div>
+          </div>
+        </div>
+        <div class="box3">&#8377;{{flight.price}}</div>
+        <div class="box4">
+          <input type="submit" value="Book Seats" />
+        </div>
+      </div>
+    </form>
+    {% endfor %}
   </body>
 </html>

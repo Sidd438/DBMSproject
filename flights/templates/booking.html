@@ -15,12 +15,14 @@
     <form action="." method="post">
       {% csrf_token %}
       <input type="hidden" name="seat_id" value="{{ booking.seat_id }}" />
+      <input type="hidden" name="booking_id" value="{{ booking.id }}" />
       <input type="hidden" name="status" value="confirm" />
       <input type="submit" value="Confirm Booking" />
     </form>
     <form action="." method="post">
       {% csrf_token %}
       <input type="hidden" name="seat_id" value="{{ booking.seat_id }}" />
+      <input type="hidden" name="booking_id" value="{{ booking.id }}" />
       <input type="hidden" name="status" value="cancel" />
       <input type="input" name="cancel_reason" value=""/>
       <input type="submit" value="Cancel Booking" />

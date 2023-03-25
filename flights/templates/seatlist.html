@@ -23,6 +23,7 @@
     <h6>Booked By You</h6>
     <form method="get" action="/flights/booking/">
     <input type="hidden" name="seat_id" value="{{seat.id}}"/>
+    <input type="hidden" name="booking_id" value="{{seat.booking_id}}"/>
     <input type="submit" value="View Booking"/>
     </form>
     {% else %}
