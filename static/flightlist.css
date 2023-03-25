@@ -3,6 +3,15 @@
     padding:0;
     box-sizing:border-box;
 }
+html{
+    background-image: linear-gradient(
+      rgb(25, 183, 197, 0.9),
+      rgb(98, 233, 86, 0.8)
+    );
+    background-attachment: fixed;
+    background-size: cover;
+    scroll-behavior: smooth;
+}
 .flightbox{
     border:1px solid black;
     display: flex;
@@ -28,8 +37,9 @@
     align-items: center;
     justify-content: center;
     display: flex;
-    margin-left: 10px;
-    margin-right:10px;
+    padding-left: 10px;
+    padding-right:10px;
+    background-color: white;
 }
 .side2{
     margin-left: 10px;

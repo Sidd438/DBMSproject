@@ -5,5 +5,53 @@
 }
 .searchbox{
     border:2px solid black;
-    padding:20px;
+    background-color: white;
+    width:80vw;
+    height:60vh;
+    margin-left: 10vw;
+    margin-top:20vh;
+}
+html{
+    background-image: linear-gradient(
+      rgb(25, 183, 197, 0.9),
+      rgb(98, 233, 86, 0.8)
+    );
+    background-attachment: fixed;
+    background-size: cover;
+    scroll-behavior: smooth;
+}
+.search_heading{
+    font-family: 'Alkatra', cursive;
+    font-size: 60px;
+    text-align: center;
+    color:white;
+    background-image: linear-gradient(90deg, rgb(117, 6, 221), rgb(21, 197, 241));
+
+}
+.search_form{
+    font-size: 24px;
+    font-family: 'Roboto', sans-serif;
+}
+.formelem{
+    margin-left:30px;
+    margin-top:40px;
+    margin-bottom:40px;
+}
+.search_form input{
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-radius: 0;
+    margin-left:20px;
+    font-size:20px;
+    outline:none;
+}
+input[type="submit"]{
+    background-color: transparent;
+    border:1px solid black;
+    color:white;
+    background-image: linear-gradient(90deg, rgb(117, 6, 221), rgb(21, 197, 241));
+    width:40%;
+    padding-top:10px;
+    padding-bottom:10px;
 }
