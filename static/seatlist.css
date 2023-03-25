@@ -3,6 +3,55 @@
     padding:0;
     box-sizing:border-box;
 }
+html{
+    /* background-image: linear-gradient(
+      rgb(25, 183, 197, 0.9),
+      rgb(98, 233, 86, 0.8)
+    ); */
+    background-attachment: fixed;
+    background-size: cover;
+    scroll-behavior: smooth;
+}
+.heading{
+    font-family: 'Alkatra', cursive;
+    font-size:40px;
+    color:white;
+    background-image: linear-gradient(90deg, rgb(117, 6, 221), rgb(21, 197, 241));
+    text-align: center;
+}
+.majordiv{
+    font-family: 'Roboto', sans-serif;
+}
+input[value="View Booking"]{
+    border:1px solid black;
+    background-color: transparent;
+    padding:10px 20px;
+    margin:20px 30px;
+    background-image: linear-gradient(90deg, rgb(117, 6, 221), rgb(21, 197, 241));
+    background-attachment: fixed;
+    background-size: cover;
+    color:white;
+}
+input[value="Book Seat"]{
+    border:1px solid black;
+    background-color: transparent;
+    padding:10px 20px;
+    margin:20px 30px;
+    background-image: linear-gradient(90deg, rgb(117, 6, 221), rgb(21, 197, 241));
+    background-attachment: fixed;
+    background-size: cover;
+    color:white;
+}
+.majordiv{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
 .seat{
-    border:1px solid #1da83c;
+    margin-left:30px;
+}
+.bookedbyyou{
+    margin:10px 30px;
+    font-size:14px;
+    color:rgb(52, 172, 9);
+    /* background-color: red; */
 }

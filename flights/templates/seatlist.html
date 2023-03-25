@@ -1,44 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Alkatra:wght@600&family=Roboto:wght@500&display=swap"
+      rel="stylesheet"
+    />
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     {% load static %}
-    <link
-      href="{% static 'seatlist.css' %}"
-      type="text/css"
-      rel="Stylesheet"
-    />
+    <link href="{% static 'seatlist.css' %}" type="text/css" rel="Stylesheet" />
     <title>Seats</title>
   </head>
 
   <body>
-    {% for seat in data %}
-    <div class="seat_arrangement">
-      <div class="seat">{{seat.name}}</div>
-    </div>
-    {%if seat.is_booked %}
-    {% if seat.booked_by_you %}
-    <h6>Booked By You</h6>
-    <form method="get" action="/flights/booking/">
-    <input type="hidden" name="seat_id" value="{{seat.id}}"/>
-    <input type="hidden" name="booking_id" value="{{seat.booking_id}}"/>
-    <input type="submit" value="View Booking"/>
-    </form>
-    {% else %}
-    <h6>Already Booked</h6>
-    {% endif %}
-    {% else %}
-    <form action="." method="post">
-      {% csrf_token %}
-    <input type="hidden" name="seat_id" value="{{seat.id}}"/>
-    <input type="hidden" name="flight_id" value="{{flight_id}}"/>
+    <div class="heading">Seats Available</div>
+    <div class="majordiv">
+      {% for seat in data %}
+      
+      {%if seat.is_booked %} {% if seat.booked_by_you %}
+      <div class="gary">
+      <div class="seat_arrangement">
+        <div class="seat">{{seat.name}}</div>
+      </div>
+      <h6 class="bookedbyyou">Booked By You</h6>
+      <form method="get" action="/flights/booking/">
+        <input type="hidden" name="seat_id" value="{{seat.id}}" />
+        <input type="hidden" name="booking_id" value="{{seat.booking_id}}" />
+        <input type="submit" value="View Booking" />
+      </form>
+      </div>
+      {% else %}
+      <div class="gary">
+      <div class="seat_arrangement">
+        <div class="seat">{{seat.name}}</div>
+      </div>
+      <h6>Already Booked</h6>
+      </div>
+      {% endif %} {% else %}
+      <div class="gary">
+      <div class="seat_arrangement">
+        <div class="seat">{{seat.name}}</div>
+      </div>
+      <form action="." method="post">
+        {% csrf_token %}
+        <input type="hidden" name="seat_id" value="{{seat.id}}" />
+        <input type="hidden" name="flight_id" value="{{flight_id}}" />
 
-    <input type="submit" value="Book Seat"/>
-    </form>
-    {% endif %}
-    {% endfor %}
+        <input type="submit" value="Book Seat" />
+      </form>
+      </div>
+      {% endif %} {% endfor %}
+    </div>
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
