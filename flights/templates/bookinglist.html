@@ -25,7 +25,7 @@
     <h5 class="vbook">{{ booking.seat }}--{{ booking.status }}</h5>
     <form method="get" action={% url 'bookingView' %}>
         <input type="hidden" name="booking_id" value="{{ booking.id }}"/>
-        <button type="submit" class="view_btn">View</button>
+        <button type="submit" class="btn btn-primary">View</button>
     </form>
     {% endfor %}
     <!-- Optional JavaScript; choose one of the two! -->

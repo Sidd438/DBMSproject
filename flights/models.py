@@ -43,8 +43,8 @@ class Booking(models.Model):
 
 
 class Payment(models.Model):
-    booking = models.ForeignKey(Booking, on_delete=models.CASCADE, related_name="payments")
-    user = models.ForeignKey(UserC, related_name="payments", on_delete=models.CASCADE)
+    booking = models.OneToOneField(Booking, on_delete=models.CASCADE, related_name="payments")
+    # user = models.ForeignKey(UserC, related_name="payments", on_delete=models.CASCADE)
 
 
 

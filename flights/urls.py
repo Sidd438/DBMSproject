@@ -5,7 +5,7 @@ from .views import *
 urlpatterns = [
     path('', FlightListView, name="flightlist"),
     path('seats/', GetSeatListView, name="seatlist"),
-    path('book/', BookSeatView, name="book"),
+    # path('book/', BookSeatView, name="book"),
     path('bookings/', BookingListView, name="bookinglist"),
     path('booking/', GetBookingView, name="bookingView"),
     path('cancel/', CancelBookingView, name="cancel"),

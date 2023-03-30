@@ -81,10 +81,14 @@ WSGI_APPLICATION = 'ticketBook.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'mydatabase', # This is where you put the name of the db file. 
-                 # If one doesn't exist, it will be created at migration time.
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "ticketBook",
+        "USER": "root",
+        "PASSWORD": "toor",
+        "HOST": "localhost",
+        "PORT": "3306",
+        # "OPTIONS": {"charset": "utf8mb4", "use_unicode": True},
     }
 }
 
