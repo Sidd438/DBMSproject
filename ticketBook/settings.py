@@ -15,7 +15,7 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+import keyconfig as senv
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -52,7 +52,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-AUTH_USER_MODEL='users.Passenger'
+AUTH_USER_MODEL='flights.Passenger'
 SITE_ID = 1
 
 ROOT_URLCONF = 'ticketBook.urls'
@@ -80,24 +80,24 @@ WSGI_APPLICATION = 'ticketBook.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.mysql",
-#         "NAME": "ticketBook",
-#         "USER": "root",
-#         "PASSWORD": "toor",
-#         "HOST": "localhost",
-#         "PORT": "3306",
-#         # "OPTIONS": {"charset": "utf8mb4", "use_unicode": True},
-#     }
-# }
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'mydatabase',
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": senv.DATABASE_NAME,
+        "USER": senv.DATABASE_USER,
+        "PASSWORD": senv.DATABASE_PASSWORD,
+        "HOST": "localhost",
+        "PORT": "3306",
+        # "OPTIONS": {"charset": "utf8mb4", "use_unicode": True},
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': 'mydatabase',
+#     }
+# }
 
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
