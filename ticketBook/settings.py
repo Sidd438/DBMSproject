@@ -80,24 +80,25 @@ WSGI_APPLICATION = 'ticketBook.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.mysql",
-#         "NAME": "ticketBook",
-#         "USER": "root",
-#         "PASSWORD": "toor",
-#         "HOST": "localhost",
-#         "PORT": "3306",
-#         # "OPTIONS": {"charset": "utf8mb4", "use_unicode": True},
-#     }
-# }
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'mydatabase',
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "ticket",
+        "USER": "root",
+        "PASSWORD": "deepakkalra",
+        "HOST": "localhost",
+        "PORT": "3306",
+        # "OPTIONS": {"charset": "utf8mb4", "use_unicode": True},
     }
 }
+# start
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': 'mydatabase',
+#     }
+# }
+#end
 
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
