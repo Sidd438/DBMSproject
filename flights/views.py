@@ -3,6 +3,7 @@ from .models import *
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.db import connection
+import mysql.connector
 # Create your views here.
 
 def get_flight_data(queryset):
@@ -26,13 +27,16 @@ def get_seat_data(queryset, request=None):
         data_small = {
             "id":seat.id,
             "name":seat.name,
-            "is_booked":Booking.objects.filter(seat=seat).exclude(status="Completed").exclude(status="Cancelled").exists(),
+            "is_booked":False,
         }
+        booking = Booking.objects.raw("SELECT * FROM bookings WHERE bookings.seat_id = %s AND bookings.status != 'Completed' AND bookings.status != 'Cancelled'", [seat.id])
+        if booking:
+            data_small["is_booked"] = True
         if request:
-            booking = Booking.objects.filter(seat=seat, user=request.user).exclude(status="Completed").exclude(status="Cancelled").first()
+            booking = Booking.objects.raw("SELECT * FROM bookings WHERE bookings.seat_id = %s AND bookings.status != 'Completed' AND bookings.status != 'Cancelled' AND bookings.user_id = %s", [seat.id, request.user.id])
             if booking:
-                data_small["booking_id"] = booking.id
-                data_small["status"] = booking.status
+                data_small["booking_id"] = booking[0].id
+                data_small["status"] = booking[0].status
                 data_small["booked_by_you"] = True
             else:
                 data_small["booked_by_you"] = False
@@ -43,12 +47,13 @@ def get_seat_data(queryset, request=None):
 def get_booking_data(queryset):
     data = []
     for booking in queryset:
+        seat = Seat.objects.raw(f'SELECT * FROM seats WHERE seats.id = {booking.seat.id}')[0]
         data_small = {
             "id":booking.id,
-            "seat":booking.seat.name,
+            "seat":seat.name,
             "status":booking.status,
             "created_at":booking.created_at,
-            "seat_id":booking.seat.id,
+            "seat_id":seat.id,
         }
         data.append(data_small)
     return data
@@ -63,32 +68,17 @@ def get_single_booking_data(booking):
     }
     return data
 
-def get_payments_data(queryset):
-    data = []
-    for payment in queryset:
-        data_small = {
-            "id":payment.id,
-            "booking_id":payment.booking.id,
-            "seat":payment.booking.seat.name,
-            "status":payment.booking.status,
-            "created_at":payment.booking.created_at,
-            "seat_id":payment.booking.seat.id,
-        }
-        data.append(data_small)
-    return data
-
-
 def FlightListView(request):
     if(request.method.lower() == "post"):
-        query = f'SELECT * FROM users_passenger WHERE (users_passenger.email = "{request.POST.get("name")}" AND users_passenger.password =  {request.POST.get("password")})'
+        query = f'SELECT * FROM passengers WHERE (passengers.email = "{request.POST.get("name")}" AND passengers.password =  {request.POST.get("password")})'
         print(query)
         # current_user = UserC.objects.filter(email=request.POST.get("name"), password=request.POST.get("password")).first()
-        current_user = UserC.objects.raw(f'SELECT * FROM users_passenger WHERE (users_passenger.email = "{request.POST.get("name")}" AND users_passenger.password =  "{request.POST.get("password")}")')[0]
+        current_user = UserC.objects.raw(f'SELECT * FROM passengers WHERE (passengers.email = "{request.POST.get("name")}" AND passengers.password =  "{request.POST.get("password")}")')[0]
         if not current_user:
             return redirect("login")
         login(request, current_user)
         # request.user = current_user
-    query = f"select * from flights_flight where 1=1"
+    query = f"select * from flights where 1=1"
     print(request.method)
     if request.method == "GET":
         if request.GET.get('destination'):
@@ -111,19 +101,19 @@ def GetSeatListView(request):
     already=False
     print(request.user, request.method)
     if request.method=="POST":
-        seat = Seat.objects.raw(f"select * from flights_seat where id = {request.POST.get('seat_id')}")[0]
-        bookings = Booking.objects.raw(f"select * from flights_booking where seat_id = {seat.id} and user_id = {request.user.id} and (status = 'Pending' or status='Confirmed')")
+        seat = Seat.objects.raw(f"select * from seats where id = {request.POST.get('seat_id')}")[0]
+        bookings = Booking.objects.raw(f"select * from bookings where seat_id = {seat.id} and user_id = {request.user.id} and (status = 'Pending' or status='Confirmed')")
         print(len(bookings))
         if len(bookings):
             already=True
         else:
             cursor = connection.cursor()
-            cursor.execute(f"insert into flights_booking (seat_id, user_id, status, created_at) values ({seat.id}, {request.user.id}, 'Pending', NOW())")
-            # Booking.objects.raw(f"insert into flights_booking (seat_id, user_id, status, created_at) values ({seat.id}, {request.user.id}, 'Pending', NOW())")
-        flight = Flight.objects.raw(f"select * from flights_flight where id = {request.POST.get('flight_id')}")[0]
+            cursor.execute(f"insert into bookings (seat_id, user_id, status, created_at) values ({seat.id}, {request.user.id}, 'Pending', NOW())")
+            # Booking.objects.raw(f"insert into booking (seat_id, user_id, status, created_at) values ({seat.id}, {request.user.id}, 'Pending', NOW())")
+        flight = Flight.objects.raw(f"select * from flights where id = {request.POST.get('flight_id')}")[0]
     else:
-        flight = Flight.objects.raw(f"select * from flights_flight where id = {request.GET.get('flight_id')}")[0]
-    seats = Seat.objects.raw(f"select * from flights_seat where flight_id = {flight.id}")
+        flight = Flight.objects.raw(f"select * from flights where id = {request.GET.get('flight_id')}")[0]
+    seats = Seat.objects.raw(f"select * from seats where flight_id = {flight.id}")
     return render(request, "seatlist.html", context={"data":get_seat_data(seats, request), "flight_id":flight.id, "already":already, "booking_id":0})
 
 
@@ -132,7 +122,7 @@ def GetSeatListView(request):
 #         return redirect("login")
 #     already=False
 #     if request.method=="POST":
-#         seat = Seat.objects.raw(f"select * from flights_seat where id = {request.POST.get('seat_id')}")[0]
+#         seat = Seat.objects.raw(f"select * from seat where id = {request.POST.get('seat_id')}")[0]
 #         if Booking.objects.filter(seat=seat).exclude(status="Completed").exclude(status="Cancelled").exists():
 #             already=True
 #             booking = Booking.objects.get(seat=seat)
@@ -143,12 +133,11 @@ def GetSeatListView(request):
 
 
 def BookingListView(request):
-    bookings = Booking.objects.raw(f"select * from flights_booking where user_id = {request.user.id}")
-    payments = Payment.objects.filter(booking__in=bookings)
+    bookings = Booking.objects.raw(f"select * from bookings where user_id = {request.user.id}")
     return render(request, "bookinglist.html", context={"data":get_booking_data(bookings)})
 
 def CancelBookingView(request):
-    Booking.objects.raw(f"update flights_booking set status = 'Cancelled' where id = {request.GET.get('booking_id')}")
+    Booking.objects.raw(f"update bookings set status = 'Cancelled' where id = {request.GET.get('booking_id')}")
     return render(request, "cancelled.html")
 
 # def GetBookingView(request):
@@ -160,13 +149,12 @@ def GetBookingView(request):
     if not request.user:
         return redirect("login")
     if request.method=="POST" and request.POST.get('status') == "confirm":
-        cursor.execute(f"update flights_booking set status = 'Confirmed' where id = {request.POST.get('booking_id')}")
-        cursor.execute(f"insert into flights_payment (booking_id) values ({request.POST.get('booking_id')})")
-        booking = Booking.objects.raw(f"select * from flights_booking where id = {request.POST.get('booking_id')}")[0]
+        cursor.execute(f"update bookings set status = 'Confirmed' where id = {request.POST.get('booking_id')}")
+        booking = Booking.objects.raw(f"select * from bookings where id = {request.POST.get('booking_id')}")[0]
     elif request.method=="POST" and request.POST.get('status') == "cancel":
-        cursor.execute(f"update flights_booking set status = 'Cancelled' where id = {request.POST.get('booking_id')}")
-        cursor.execute(f"insert into flights_cancellation (booking_id, reason, created_at) values ({request.POST.get('booking_id')}, '{request.POST.get('cancel_reason')}', NOW())")
-        booking = Booking.objects.raw(f"select * from flights_booking where id = {request.POST.get('booking_id')}")[0]
+        cursor.execute(f"update bookings set status = 'Cancelled' where id = {request.POST.get('booking_id')}")
+        cursor.execute(f"insert into cancellations (booking_id, reason, created_at) values ({request.POST.get('booking_id')}, '{request.POST.get('cancel_reason')}', NOW())")
+        booking = Booking.objects.raw(f"select * from bookings where id = {request.POST.get('booking_id')}")[0]
     else:
-        booking = Booking.objects.raw(f"select * from flights_booking where id = {request.GET.get('booking_id')}")[0]       
+        booking = Booking.objects.raw(f"select * from bookings where id = {request.GET.get('booking_id')}")[0]       
     return render(request, "booking.html", context={"booking":get_single_booking_data(booking)})
