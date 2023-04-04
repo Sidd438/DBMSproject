@@ -16,6 +16,11 @@
   </head>
 
   <body>
+    {% if already %}
+    <div class="already">
+      <h1>Seat Already Booked</h1>
+    </div>
+    {% endif %}
     <div class="heading">Seats Available</div>
     <div class="majordiv">
       {% for seat in data %}

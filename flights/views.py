@@ -3,7 +3,7 @@ from .models import *
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.db import connection
-import mysql.connector
+import mysql.connector 
 # Create your views here.
 
 def get_flight_data(queryset):
@@ -59,12 +59,13 @@ def get_booking_data(queryset):
     return data
 
 def get_single_booking_data(booking):
+    seat = Seat.objects.raw(f'SELECT * FROM seats WHERE seats.id = {booking.seat.id}')[0]
     data = {
         "id":booking.id,
-        "seat":booking.seat.name,
+        "seat":seat.name,
         "status":booking.status,
         "created_at":booking.created_at,
-        "seat_id":booking.seat.id,
+        "seat_id":seat.id,
     }
     return data
 
@@ -102,13 +103,15 @@ def GetSeatListView(request):
     print(request.user, request.method)
     if request.method=="POST":
         seat = Seat.objects.raw(f"select * from seats where id = {request.POST.get('seat_id')}")[0]
-        bookings = Booking.objects.raw(f"select * from bookings where seat_id = {seat.id} and user_id = {request.user.id} and (status = 'Pending' or status='Confirmed')")
-        print(len(bookings))
-        if len(bookings):
+        cursor = connection.cursor()
+        cursor.execute("begin;")
+        booking = Booking.objects.raw(f"select * from bookings where seat_id = {seat.id} and status != 'Completed' and status != 'Cancelled' for update ")
+        if booking:
             already=True
+            cursor.execute("rollback;")
         else:
-            cursor = connection.cursor()
             cursor.execute(f"insert into bookings (seat_id, user_id, status, created_at) values ({seat.id}, {request.user.id}, 'Pending', NOW())")
+            cursor.execute("commit;")
             # Booking.objects.raw(f"insert into booking (seat_id, user_id, status, created_at) values ({seat.id}, {request.user.id}, 'Pending', NOW())")
         flight = Flight.objects.raw(f"select * from flights where id = {request.POST.get('flight_id')}")[0]
     else:
