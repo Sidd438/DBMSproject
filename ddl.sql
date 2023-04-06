@@ -102,7 +102,7 @@ ALTER TABLE `payments` ADD CONSTRAINT `payments_booking_id_fa2b6c3e_fk_bookings_
 ALTER TABLE `cancellations` ADD CONSTRAINT `cancellations_booking_id_a4cfa381_fk_bookings_id` FOREIGN KEY (`booking_id`) REFERENCES `bookings` (`id`);
 
 insert into flights (name, start_time, end_time, price, source, destination) values ('Flight 1', '2020-01-01 00:00:00', '2020-01-01 00:00:00', 100, 'HCM', 'Hanoi');
-insert into flights (name, start_time, end_time, price, source, destination) values ('Flight 2', '2020-01-01 00:00:00', '2020-01-01 00:00:00', 100, 'HCM', 'Hanoi');
+insert into flights (id,name, start_time, end_time, price, source, destination) values (2,'Flight 2', '2020-01-01 00:00:00', '2020-01-01 00:00:00', 100, 'Delhi', 'Bombay');
 insert into seats (name, flight_id) values ('A1', 1);
 insert into seats (name, flight_id) values ('A2', 1);
 insert into seats (name, flight_id) values ('A3', 1);
