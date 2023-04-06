@@ -5,6 +5,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.db import connection
 import mysql.connector 
 # Create your views here.
+from django.conf import settings
+from django.core.mail import send_mail
 
 def get_flight_data(queryset):
     data = []
@@ -71,8 +73,6 @@ def get_single_booking_data(booking):
 
 def FlightListView(request):
     if(request.method.lower() == "post"):
-        query = f'SELECT * FROM passengers WHERE (passengers.email = "{request.POST.get("name")}" AND passengers.password =  {request.POST.get("password")})'
-        print(query)
         # current_user = UserC.objects.filter(email=request.POST.get("name"), password=request.POST.get("password")).first()
         current_user = UserC.objects.raw(f'SELECT * FROM passengers WHERE (passengers.email = "{request.POST.get("name")}" AND passengers.password =  "{request.POST.get("password")}")')[0]
         if not current_user:
@@ -112,8 +112,9 @@ def GetSeatListView(request):
         else:
             cursor.execute(f"insert into bookings (seat_id, user_id, status, created_at) values ({seat.id}, {request.user.id}, 'Pending', NOW())")
             cursor.execute("commit;")
+            send_mail(subject="Booking Created", message=f"Your booking for seat {seat.name} has been created", from_email=settings.EMAIL_HOST_USER, recipient_list=[request.user.email], fail_silently=True)
             # Booking.objects.raw(f"insert into booking (seat_id, user_id, status, created_at) values ({seat.id}, {request.user.id}, 'Pending', NOW())")
-        flight = Flight.objects.raw(f"select * from flights where id = {request.POST.get('flight_id')}")[0]
+            flight = Flight.objects.raw(f"select * from flights where id = {request.POST.get('flight_id')}")[0]
     else:
         flight = Flight.objects.raw(f"select * from flights where id = {request.GET.get('flight_id')}")[0]
     seats = Seat.objects.raw(f"select * from seats where flight_id = {flight.id}")
@@ -154,10 +155,12 @@ def GetBookingView(request):
     if request.method=="POST" and request.POST.get('status') == "confirm":
         cursor.execute(f"update bookings set status = 'Confirmed' where id = {request.POST.get('booking_id')}")
         booking = Booking.objects.raw(f"select * from bookings where id = {request.POST.get('booking_id')}")[0]
+        send_mail(subject="Booking Confirmed", message=f"Your booking for seat {booking.seat.name} has been confirmed", from_email=settings.EMAIL_HOST_USER, recipient_list=[request.user.email], fail_silently=True)
     elif request.method=="POST" and request.POST.get('status') == "cancel":
         cursor.execute(f"update bookings set status = 'Cancelled' where id = {request.POST.get('booking_id')}")
         cursor.execute(f"insert into cancellations (booking_id, reason, created_at) values ({request.POST.get('booking_id')}, '{request.POST.get('cancel_reason')}', NOW())")
         booking = Booking.objects.raw(f"select * from bookings where id = {request.POST.get('booking_id')}")[0]
+        send_mail(subject="Booking Cancelled", message=f"Your booking for seat {booking.seat.name} has been cancelled", from_email=settings.EMAIL_HOST_USER, recipient_list=[request.user.email], fail_silently=True)
     else:
         booking = Booking.objects.raw(f"select * from bookings where id = {request.GET.get('booking_id')}")[0]       
     return render(request, "booking.html", context={"booking":get_single_booking_data(booking)})
