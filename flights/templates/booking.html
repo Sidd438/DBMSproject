@@ -10,6 +10,17 @@
   </head>
 
   <body>
+    <div class="navbar">
+      <div class="s1">
+        {% load static %}
+        <img src="/static/abc.png" />
+      </div>
+      <div class="s2">
+        <div class="p1">Flights</div>
+        <div class="p2">Your Bookings</div>
+      </div>
+      <div class="s3">Logout</div>
+    </div>
     <div class="big">
       <div class="header">Confirm Booking</div>
       <h5 class="orange">{{ booking.seat }}--{{ booking.status }}</h5>

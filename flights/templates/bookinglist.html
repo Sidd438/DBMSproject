@@ -20,6 +20,17 @@
   </head>
 
   <body>
+    <div class="navbar">
+      <div class="s1">
+        {% load static %}
+        <img src="/static/abc.png" />
+      </div>
+      <div class="s2">
+        <div class="p1">Flights</div>
+        <div class="p2">Your Bookings</div>
+      </div>
+      <div class="s3">Logout</div>
+    </div>
     <div class="heads">Seats Booked By You</div>
     {% for booking in data %}
     <h5 class="vbook">{{ booking.seat }}--{{ booking.status }}</h5>

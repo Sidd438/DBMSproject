@@ -16,42 +16,51 @@
   </head>
 
   <body>
+    <div class="navbar">
+      <div class="s1">
+        {% load static %}
+        <img src="/static/abc.png" />
+      </div>
+      <div class="s2">
+        <div class="p1">Flights</div>
+        <div class="p2">Your Bookings</div>
+      </div>
+      <div class="s3">Logout</div>
+    </div>
     <div class="heading">Seats Available</div>
     <div class="majordiv">
-      {% for seat in data %}
-      
-      {%if seat.is_booked %} {% if seat.booked_by_you %}
+      {% for seat in data %} {%if seat.is_booked %} {% if seat.booked_by_you %}
       <div class="gary">
-      <div class="seat_arrangement">
-        <div class="seat">{{seat.name}}</div>
-      </div>
-      <h6 class="bookedbyyou">Booked By You</h6>
-      <h6 class="margin">Status -- {{seat.status}}</h6>
-      <form method="get" action="/flights/booking/">
-        <input type="hidden" name="seat_id" value="{{seat.id}}" />
-        <input type="hidden" name="booking_id" value="{{seat.booking_id}}" />
-        <input type="submit" value="View Booking" />
-      </form>
+        <div class="seat_arrangement">
+          <div class="seat">{{seat.name}}</div>
+        </div>
+        <h6 class="bookedbyyou">Booked By You</h6>
+        <h6 class="margin">Status -- {{seat.status}}</h6>
+        <form method="get" action="/flights/booking/">
+          <input type="hidden" name="seat_id" value="{{seat.id}}" />
+          <input type="hidden" name="booking_id" value="{{seat.booking_id}}" />
+          <input type="submit" value="View Booking" />
+        </form>
       </div>
       {% else %}
       <div class="gary">
-      <div class="seat_arrangement">
-        <div class="seat">{{seat.name}}</div>
-      </div>
-      <h6>Already Booked</h6>
+        <div class="seat_arrangement">
+          <div class="seat">{{seat.name}}</div>
+        </div>
+        <h6>Already Booked</h6>
       </div>
       {% endif %} {% else %}
       <div class="gary">
-      <div class="seat_arrangement">
-        <div class="seat">{{seat.name}}</div>
-      </div>
-      <form action="." method="post">
-        {% csrf_token %}
-        <input type="hidden" name="seat_id" value="{{seat.id}}" />
-        <input type="hidden" name="flight_id" value="{{flight_id}}" />
+        <div class="seat_arrangement">
+          <div class="seat">{{seat.name}}</div>
+        </div>
+        <form action="." method="post">
+          {% csrf_token %}
+          <input type="hidden" name="seat_id" value="{{seat.id}}" />
+          <input type="hidden" name="flight_id" value="{{flight_id}}" />
 
-        <input type="submit" value="Book Seat" />
-      </form>
+          <input type="submit" value="Book Seat" />
+        </form>
       </div>
       {% endif %} {% endfor %}
     </div>
