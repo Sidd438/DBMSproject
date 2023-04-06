@@ -3,7 +3,8 @@ from .models import *
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.db import connection
-import mysql.connector
+# import mysql.connector
+
 # Create your views here.
 
 def get_flight_data(queryset):

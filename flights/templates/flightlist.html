@@ -21,7 +21,16 @@
   </head>
 
   <body>
-    
+    <div class="navbar">
+      <div class="s1">
+        <img src="/flights/abc.png" />
+      </div>
+      <div class="s2">
+        <div class="p1">Flights</div>
+        <div class="p2">Your Bookings</div>
+      </div>
+      <div class="s3">Logout</div>
+    </div>
     {% for flight in data %}
     <form method="get" action="seats/">
       <input type="hidden" name="flight_id" value="{{flight.id}}" />
