@@ -67,6 +67,7 @@ from django.contrib.auth import get_user_model
 UserC = get_user_model()
 
 class Flight(models.Model):
+    flight_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
@@ -85,7 +86,7 @@ class Flight(models.Model):
 
 
 class Seat(models.Model):
-    id=None
+    seat_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     flight = models.ForeignKey(Flight, on_delete=models.CASCADE, related_name="seats")
 
@@ -96,6 +97,7 @@ class Seat(models.Model):
 
 
 class Booking(models.Model):
+    booking_id = models.AutoField(primary_key=True)
     seat = models.ForeignKey(Seat, on_delete=models.CASCADE, related_name="bookings")
     status = models.CharField(max_length=20, choices=BOOKING_STATUS_CHOICES)
     user = models.ForeignKey(UserC, related_name="Bookings", on_delete=models.CASCADE)
@@ -117,6 +119,7 @@ class Cancellation(models.Model):
 
 
 class Email(models.Model):
+    em_id = models.AutoField(primary_key=True)
     recepient = models.ForeignKey(UserC, on_delete=models.CASCADE, related_name="emails")
     subject = models.CharField(max_length=100)
     body = models.TextField()
@@ -127,6 +130,7 @@ class Email(models.Model):
 
 
 class SMS(models.Model):
+    sms_id = models.AutoField(primary_key=True)
     recepient = models.ForeignKey(UserC, on_delete=models.CASCADE, related_name="sms")
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)

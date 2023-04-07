@@ -34,7 +34,7 @@
     </div>
     {% for flight in data %}
     <form method="get" action="seats/">
-      <input type="hidden" name="flight_id" value="{{flight.id}}" />
+      <input type="hidden" name="flight_id" value="{{flight.flight_id}}" />
       <div class="flightbox">
         <div class="box1">{{flight.name}}</div>
         <div class="box2">

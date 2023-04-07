@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-import pymysql
+# import pymysql
 import os
 from pathlib import Path
 
@@ -92,8 +92,8 @@ DATABASES = {
         # "OPTIONS": {"charset": "utf8mb4", "use_unicode": True},
     }
 }
-pymysql.version_info = (1, 4, 2, "final", 0)
-pymysql.install_as_MySQLdb()
+# pymysql.version_info = (1, 4, 2, "final", 0)
+# pymysql.install_as_MySQLdb()
 # start
 # DATABASES = {
 #     'default': {
