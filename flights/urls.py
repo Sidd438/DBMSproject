@@ -8,7 +8,9 @@ urlpatterns = [
     # path('book/', BookSeatView, name="book"),
     path('bookings/', BookingListView, name="bookinglist"),
     path('booking/', GetBookingView, name="bookingView"),
+    path("cancellations/", CancellationListView, name="cancellationView"),
+    path("email/", EmailListView, name="emailView"),
+    path("sms/", SmsListView, name="smsView"),
     path('cancel/', CancelBookingView, name="cancel"),
-    path('search/', SearchFlightView, name='search')
-    
+    path('search/', SearchFlightView, name='search')   
 ]
