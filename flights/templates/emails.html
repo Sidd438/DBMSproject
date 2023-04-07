@@ -12,19 +12,41 @@
     />
 
     {% load static %}
-    <link href="{% static 'bookinglist.css' %}" type="text/css" rel="Stylesheet" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Alkatra:wght@600&family=Roboto:wght@500&display=swap" rel="stylesheet">
+    <link href="{% static 'email.css' %}" type="text/css" rel="Stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Alkatra:wght@600&family=Roboto:wght@500&display=swap"
+      rel="stylesheet"
+    />
     <title>Booking List</title>
   </head>
 
   <body>
-    <div class="heads">Emails For You</div>
-    {% for emails in data %}
-    <h5 class="vbook">{{ emails.subject }}</h5>
-    <h6>{{emails.body}}</h6>
-    {% endfor %}
+    <div class="navbar">
+      <div class="s1">
+        {% load static %}
+        <img src="/static/abc.png" />
+      </div>
+      <div class="s2">
+        <button class="p1">Flights</button>
+        <button class="p2">Your Bookings</button>
+        <button class="p3">SMS Sent</button>
+        <button class="p4">Mails Sent</button>
+      </div>
+      <button class="s3">Logout</button>
+    </div>
+    <div class="mainbody">
+      <div class="heads">Emails For You</div>
+      <div class="otherdata">
+        {% for emails in data %}
+        <div class="majordiv">
+          <div class="sub">{{ emails.subject }}</div>
+          <div class="bod">{{emails.body}}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->

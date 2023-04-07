@@ -25,34 +25,57 @@
         <img src="/static/abc.png" />
       </div>
       <div class="s2">
-        <div class="p1">Flights</div>
-        <div class="p2">Your Bookings</div>
+        <button class="p1">Flights</button>
+        <button class="p2">Your Bookings</button>
+        <button class="p3">SMS Sent</button>
+        <button class="p4">Mails Sent</button>
       </div>
-      <div class="s3">Logout</div>
+      <button class="s3">Logout</button>
     </div>
     <div class="searchbox">
-      <h2>Search</h2>
+      <div class="headg">Search</div>
       <form action="/flights/" method="get">
         <div class="search">
           <div class="search1">
             <div class="source">
               <label for="source">Source</label>
-              <input type="text" name="source" id="source" />
-            </div>
-            <div class="search2">
-              {% comment %}
-              <div class="date">
-                <label for="date">Date</label>
-                <input type="date" name="date" id="date" />
-              </div>
-              {% endcomment %}
-              <div class="searchbutton">
-                <center><input type="submit" value="Search" /></center>
-              </div>
+              <input
+                type="text"
+                name="source"
+                id="source"
+                placeholder="enter the source"
+              />
             </div>
           </div>
-        </form>
-      </div>
+          <div class="search2">
+            {% comment %}
+            <div class="date">
+              <label for="date">Date</label>
+              <input
+                type="date"
+                name="date"
+                id="date"
+                placeholder="enter the date of travel"
+              />
+            </div>
+            {% endcomment %}
+          </div>
+          <div class="search3">
+            <div class="destination">
+              <label for="destination">Destination</label>
+              <input
+                type="text"
+                name="destination"
+                id="source"
+                placeholder="enter the destination"
+              />
+            </div>
+          </div>
+          <div class="searchbutton">
+            <center><input type="submit" value="Search" /></center>
+          </div>
+        </div>
+      </form>
     </div>
     <!-- {% for flight in data %}
     <form method="get" action="seats/">
