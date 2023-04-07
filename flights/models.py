@@ -41,7 +41,7 @@ class Passenger(AbstractUser):
     )
     username=None
     password = models.CharField(max_length=100)
-    email = models.EmailField(_('email address'), unique=True)
+    email = models.EmailField(_('email address'), primary_key=True)
     date_of_birth = models.DateField(blank=True,null=True)
     gender = models.CharField(_('gender'),max_length=2, choices=GENDER_CHOICES)
     name = models.CharField(max_length=100)
@@ -85,6 +85,7 @@ class Flight(models.Model):
 
 
 class Seat(models.Model):
+    id=None
     name = models.CharField(max_length=100)
     flight = models.ForeignKey(Flight, on_delete=models.CASCADE, related_name="seats")
 
@@ -107,9 +108,28 @@ class Booking(models.Model):
 
 
 class Cancellation(models.Model):
-    booking = models.OneToOneField(Booking, on_delete=models.CASCADE, related_name="cancellation")
+    booking = models.OneToOneField(Booking, on_delete=models.CASCADE, related_name="cancellation", primary_key=True)
     created_at = models.DateTimeField(auto_now_add=True)
     reason = models.TextField()
 
     class Meta:
         db_table = "cancellations"
+
+
+class Email(models.Model):
+    recepient = models.ForeignKey(UserC, on_delete=models.CASCADE, related_name="emails")
+    subject = models.CharField(max_length=100)
+    body = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "emails"
+
+
+class SMS(models.Model):
+    recepient = models.ForeignKey(UserC, on_delete=models.CASCADE, related_name="sms")
+    body = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "sms"
