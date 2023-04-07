@@ -11,8 +11,9 @@ from django.core.mail import send_mail
 def get_flight_data(queryset):
     data = []
     for flight in queryset:
+        print(flight.pk, "kljn")
         data_small = {
-            "id":flight.id,
+            "id":flight.pk,
             "name":flight.name,
             "source":flight.source,
             "destination":flight.destination,
@@ -27,17 +28,17 @@ def get_seat_data(queryset, request=None):
     data = []
     for seat in queryset:
         data_small = {
-            "id":seat.id,
+            "id":seat.pk,
             "name":seat.name,
             "is_booked":False,
         }
-        booking = Booking.objects.raw("SELECT * FROM bookings WHERE bookings.seat_id = %s AND bookings.status != 'Completed' AND bookings.status != 'Cancelled'", [seat.id])
+        booking = Booking.objects.raw("SELECT * FROM bookings WHERE bookings.seat_id = %s AND bookings.status != 'Completed' AND bookings.status != 'Cancelled'", [seat.pk])
         if booking:
             data_small["is_booked"] = True
         if request:
-            booking = Booking.objects.raw("SELECT * FROM bookings WHERE bookings.seat_id = %s AND bookings.status != 'Completed' AND bookings.status != 'Cancelled' AND bookings.user_id = %s", [seat.id, request.user.pk])
+            booking = Booking.objects.raw("SELECT * FROM bookings WHERE bookings.seat_id = %s AND bookings.status != 'Completed' AND bookings.status != 'Cancelled' AND bookings.user_id = %s", [seat.pk, request.user.pk])
             if booking:
-                data_small["booking_id"] = booking[0].id
+                data_small["booking_id"] = booking[0].pk
                 data_small["status"] = booking[0].status
                 data_small["booked_by_you"] = True
             else:
@@ -49,36 +50,36 @@ def get_seat_data(queryset, request=None):
 def get_booking_data(queryset):
     data = []
     for booking in queryset:
-        seat = Seat.objects.raw(f'SELECT * FROM seats WHERE seats.id = {booking.seat.id}')[0]
+        seat = Seat.objects.raw(f'SELECT * FROM seats WHERE seats.id = {booking.seat.pk}')[0]
         data_small = {
-            "id":booking.id,
+            "id":booking.pk,
             "seat":seat.name,
             "status":booking.status,
             "created_at":booking.created_at,
-            "seat_id":seat.id,
+            "seat_id":seat.pk,
         }
         data.append(data_small)
     return data
 
 def get_single_booking_data(booking):
-    seat = Seat.objects.raw(f'SELECT * FROM seats WHERE seats.id = {booking.seat.id}')[0]
+    seat = Seat.objects.raw(f'SELECT * FROM seats WHERE seat_id = {booking.seat.pk}')[0]
     data = {
-        "id":booking.id,
+        "id":booking.pk,
         "seat":seat.name,
         "status":booking.status,
         "created_at":booking.created_at,
-        "seat_id":seat.id,
+        "seat_id":seat.pk,
     }
     return data
 
 def get_cancellation_data(queryset):
     data = []
     for cancellation in queryset:
-        booking = Booking.objects.raw(f'SELECT * FROM bookings WHERE bookings.id = {cancellation.booking.id}')[0]
-        seat = Seat.objects.raw(f'SELECT * FROM seats WHERE seats.id = {booking.seat.id}')[0]
-        flight = Flight.objects.raw(f'SELECT * FROM flights WHERE flights.id = {seat.flight.id}')[0]
+        booking = Booking.objects.raw(f'SELECT * FROM bookings WHERE bookings.booking_id = {cancellation.booking.pk}')[0]
+        seat = Seat.objects.raw(f'SELECT * FROM seats WHERE seats.seat_id = {booking.seat.pk}')[0]
+        flight = Flight.objects.raw(f'SELECT * FROM flights WHERE flights.flight_id = {seat.flight.pk}')[0]
         data_small = {
-            "booking_id":cancellation.booking.id,
+            "booking_id":cancellation.booking.pk,
             "created_at":cancellation.created_at,
             "seat":seat.name,
             "flight":flight.name,
@@ -92,7 +93,7 @@ def get_email_data(queryset):
     data = []
     for email in queryset:
         data_small = {
-            "id":email.id,
+            "id":email.pk,
             "subject":email.subject,
             "body":email.body,
             "created_at":email.created_at,
@@ -104,7 +105,7 @@ def get_sms_data(queryset):
     data = []
     for sms in queryset:
         data_small = {
-            "id":sms.id,
+            "id":sms.pk,
             "body":sms.body,
             "created_at":sms.created_at,
         }
@@ -133,7 +134,10 @@ def FlightListView(request):
 def SearchFlightView(request):
     if(request.method.lower() == "post"):
         # current_user = UserC.objects.filter(email=request.POST.get("name"), password=request.POST.get("password")).first()
-        current_user = UserC.objects.raw(f'SELECT * FROM passengers WHERE (passengers.email = "{request.POST.get("name")}" AND passengers.password =  "{request.POST.get("password")}")')[0]
+        try:
+            current_user = UserC.objects.raw(f'SELECT * FROM passengers WHERE (passengers.email = "{request.POST.get("name")}" AND passengers.password =  "{request.POST.get("password")}")')[0]
+        except IndexError as e:
+            current_user = None
         if not current_user:
             return redirect("login")
         login(request, current_user)
@@ -149,24 +153,24 @@ def GetSeatListView(request):
     already=False
     print(request.user, request.method)
     if request.method=="POST":
-        seat = Seat.objects.raw(f"select * from seats where id = {request.POST.get('seat_id')}")[0]
+        seat = Seat.objects.raw(f"select * from seats where seat_id = {request.POST.get('seat_id')}")[0]
         cursor = connection.cursor()
         cursor.execute("begin;")
-        booking = Booking.objects.raw(f"select * from bookings where seat_id = {seat.id} and status != 'Completed' and status != 'Cancelled' for update ")
+        booking = Booking.objects.raw(f"select * from bookings where seat_id = {seat.pk} and status != 'Completed' and status != 'Cancelled' for update ")
         if booking:
             already=True
             cursor.execute("rollback;")
         else:
-            cursor.execute(f"insert into bookings (seat_id, user_id, status, created_at) values ({seat.id}, '{request.user.pk}', 'Pending', NOW())")
+            cursor.execute(f"insert into bookings (seat_id, user_id, status, created_at) values ({seat.pk}, '{request.user.pk}', 'Pending', NOW())")
             cursor.execute("commit;")
             send_mail(subject="Booking Created", message=f"Your booking for seat {seat.name} has been created", from_email=settings.EMAIL_HOST_USER, recipient_list=[request.user.email], fail_silently=True)
             cursor.execute("insert into emails (recepient_id, subject, body, created_at) values (%s, %s, %s, NOW())", [request.user.pk, "Booking Created", f"Your booking for seat {seat.name} has been created"])
             cursor.execute("insert into sms(recepient_id, body, created_at) values (%s, %s, NOW())", [request.user.pk, f"Your booking for seat {seat.name} has been created)"])
-            flight = Flight.objects.raw(f"select * from flights where id = {request.POST.get('flight_id')}")[0]
+            flight = Flight.objects.raw(f"select * from flights where flight_id = {request.POST.get('flight_id')}")[0]
     else:
-        flight = Flight.objects.raw(f"select * from flights where id = {request.GET.get('flight_id')}")[0]
-    seats = Seat.objects.raw(f"select * from seats where flight_id = {flight.id}")
-    return render(request, "seatlist.html", context={"data":get_seat_data(seats, request), "flight_id":flight.id, "already":already, "booking_id":0})
+        flight = Flight.objects.raw(f"select * from flights where flight_id = {request.GET.get('flight_id')}")[0]
+    seats = Seat.objects.raw(f"select * from seats where flight_id = {flight.pk}")
+    return render(request, "seatlist.html", context={"data":get_seat_data(seats, request), "flight_id":flight.pk, "already":already, "booking_id":0})
 
 
 # def BookSeatView(request):
@@ -185,15 +189,15 @@ def GetSeatListView(request):
 
 
 def BookingListView(request):
-    bookings = Booking.objects.raw(f"select * from bookings where user_id = {request.user.id}")
+    bookings = Booking.objects.raw(f"select * from bookings where user_id = {request.user.pk}")
     return render(request, "bookinglist.html", context={"data":get_booking_data(bookings)})
 
 def CancelBookingView(request):
-    Booking.objects.raw(f"update bookings set status = 'Cancelled' where id = {request.GET.get('booking_id')}")
+    Booking.objects.raw(f"update bookings set status = 'Cancelled' where booking_id = {request.GET.get('booking_id')}")
     return render(request, "cancelled.html")
 
 def CancellationListView(request):
-    cancellations = Cancellation.objects.raw(f"select * from cancellations where booking_id in (select id from bookings where user_id = '{request.user.pk}' and status = 'Cancelled')")
+    cancellations = Cancellation.objects.raw(f"select * from cancellations where booking_id in (select booking_id from bookings where user_id = '{request.user.pk}' and status = 'Cancelled')")
     return render(request, "cancellations.html", context={"data":get_cancellation_data(cancellations)})
 
 def EmailListView(request):
@@ -213,18 +217,18 @@ def GetBookingView(request):
     if not request.user:
         return redirect("login")
     if request.method=="POST" and request.POST.get('status') == "confirm":
-        cursor.execute(f"update bookings set status = 'Confirmed' where id = {request.POST.get('booking_id')}")
-        booking = Booking.objects.raw(f"select * from bookings where id = {request.POST.get('booking_id')}")[0]
+        cursor.execute(f"update bookings set status = 'Confirmed' where booking_id = {request.POST.get('booking_id')}")
+        booking = Booking.objects.raw(f"select * from bookings where booking_id = {request.POST.get('booking_id')}")[0]
         send_mail(subject="Booking Confirmed", message=f"Your booking for seat {booking.seat.name} has been confirmed", from_email=settings.EMAIL_HOST_USER, recipient_list=[request.user.email], fail_silently=True)
         cursor.execute("insert into emails (recepient_id, subject, body, created_at) values (%s, %s, %s, NOW())", [request.user.pk, "Booking Confirmed", f"Your booking for seat {booking.seat.name} has been confirmed"])
         cursor.execute("insert into sms(recepient_id, body, created_at) values (%s, %s, NOW())", [request.user.pk, f"Your booking for seat {booking.seat.name} has been confirmed"])
     elif request.method=="POST" and request.POST.get('status') == "cancel":
-        cursor.execute(f"update bookings set status = 'Cancelled' where id = {request.POST.get('booking_id')}")
+        cursor.execute(f"update bookings set status = 'Cancelled' where booking_id = {request.POST.get('booking_id')}")
         cursor.execute(f"insert into cancellations (booking_id, reason, created_at) values ({request.POST.get('booking_id')}, '{request.POST.get('cancel_reason')}', NOW())")
-        booking = Booking.objects.raw(f"select * from bookings where id = {request.POST.get('booking_id')}")[0]
+        booking = Booking.objects.raw(f"select * from bookings where booking_id = {request.POST.get('booking_id')}")[0]
         send_mail(subject="Booking Cancelled", message=f"Your booking for seat {booking.seat.name} has been cancelled", from_email=settings.EMAIL_HOST_USER, recipient_list=[request.user.email], fail_silently=True)
         cursor.execute("insert into emails (recepient_id, subject, body, created_at) values (%s, %s, %s, NOW())", [request.user.pk, "Booking Cancelled", f"Your booking for seat {booking.seat.name} has been cancelled"])
         cursor.execute("insert into sms(recepient_id, body, created_at) values (%s, %s, NOW())", [request.user.pk, f"Your booking for seat {booking.seat.name} has been cancelled"])
     else:
-        booking = Booking.objects.raw(f"select * from bookings where id = {request.GET.get('booking_id')}")[0]       
+        booking = Booking.objects.raw(f"select * from bookings where booking_id = {request.GET.get('booking_id')}")[0]       
     return render(request, "booking.html", context={"booking":get_single_booking_data(booking)})
