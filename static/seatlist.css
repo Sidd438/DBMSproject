@@ -102,15 +102,44 @@ input[value="Book Seat"]{
     align-items: center;
     justify-content: center;
 }
+
 .p1{
     margin-right: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: transparent;
+    border:0px solid black;
+    color:white;
+    font-size: 18px;
 }
 .p2{
     margin-left: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: transparent;
+    border:0px solid black;
+    color:white;
+    font-size: 18px;
+}
+.p3{
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border:0px solid black;
+    color:white;
+    font-size: 18px;
+}
+.p4{
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border:0px solid black;
+    color:white;
+    font-size: 18px;
 }
