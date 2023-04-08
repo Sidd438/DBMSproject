@@ -50,7 +50,7 @@ def get_seat_data(queryset, request=None):
 def get_booking_data(queryset):
     data = []
     for booking in queryset:
-        seat = Seat.objects.raw(f'SELECT * FROM seats WHERE seats.id = {booking.seat.pk}')[0]
+        seat = Seat.objects.raw(f'SELECT * FROM seats WHERE seats.seat_id = {booking.seat.pk}')[0]
         data_small = {
             "id":booking.pk,
             "seat":seat.name,
@@ -131,6 +131,8 @@ def FlightListView(request):
             query += f" and CAST(start_time AS DATE) = '{request.GET.get('date')}'"
         print(request.GET)
     flights = Flight.objects.raw(query)
+    if not request.user.is_authenticated:
+        return redirect("login")
     return render(request, "flightlist.html", context={"data":flights, "destination":request.GET.get('destination'), "source":request.GET.get('source')})
 
 
@@ -145,13 +147,13 @@ def SearchFlightView(request):
             return redirect("login")
         login(request, current_user)
         # request.user = current_user
-    if not request.user:
+    if not request.user.is_authenticated:
         return redirect("login")
     return render(request, "searchbox.html", context={"destination":request.POST.get('destination'), "source":request.POST.get('source')})
 
 
 def GetSeatListView(request):
-    if not request.user:
+    if not request.user.is_authenticated:
         return redirect("login")
     already=False
     print(request.user, request.method)
@@ -192,22 +194,32 @@ def GetSeatListView(request):
 
 
 def BookingListView(request):
-    bookings = Booking.objects.raw(f"select * from bookings where user_id = {request.user.pk}")
+    if not request.user.is_authenticated:
+        return redirect("login")
+    bookings = Booking.objects.raw(f"select * from bookings where user_id = '{request.user.pk}'")
     return render(request, "bookinglist.html", context={"data":get_booking_data(bookings)})
 
 def CancelBookingView(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
     Booking.objects.raw(f"update bookings set status = 'Cancelled' where booking_id = {request.GET.get('booking_id')}")
     return render(request, "cancelled.html")
 
 def CancellationListView(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
     cancellations = Cancellation.objects.raw(f"select * from cancellations where booking_id in (select booking_id from bookings where user_id = '{request.user.pk}' and status = 'Cancelled')")
     return render(request, "cancellations.html", context={"data":get_cancellation_data(cancellations)})
 
 def EmailListView(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
     emails = Email.objects.raw(f"select * from emails where recepient_id = '{request.user.pk}'")
     return render(request, "emails.html", context={"data":get_email_data(emails)})
 
 def SmsListView(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
     sms = SMS.objects.raw(f"select * from sms where recepient_id = '{request.user.pk}'")
     return render(request, "sms.html", context={"data":get_sms_data(sms)})
 
@@ -216,6 +228,8 @@ def SmsListView(request):
 #     return render(request, "booking.html", context={"data":get_booking_data([booking])})
 
 def GetBookingView(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
     cursor = connection.cursor()
     if not request.user:
         return redirect("login")
