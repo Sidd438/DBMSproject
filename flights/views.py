@@ -127,6 +127,9 @@ def FlightListView(request):
             query += f" and destination = '{request.GET.get('destination')}'"
         if request.GET.get('source'):
             query += f" and source = '{request.GET.get('source')}'"
+        if request.GET.get('date'):
+            query += f" and CAST(start_time AS DATE) = '{request.GET.get('date')}'"
+        print(request.GET)
     flights = Flight.objects.raw(query)
     return render(request, "flightlist.html", context={"data":flights, "destination":request.GET.get('destination'), "source":request.GET.get('source')})
 

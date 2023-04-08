@@ -39,13 +39,15 @@
               <label for="source">Source</label>
               <input type="text" name="source" id="source" />
             </div>
+            <div class="destination">
+              <label for="destination">destination</label>
+              <input type="text" name="destination" id="destination" />
+            </div>
             <div class="search2">
-              {% comment %}
               <div class="date">
                 <label for="date">Date</label>
                 <input type="date" name="date" id="date" />
               </div>
-              {% endcomment %}
               <div class="searchbutton">
                 <center><input type="submit" value="Search" /></center>
               </div>
@@ -62,7 +64,7 @@
         <div class="box2">
           <div class="side1">
             <div class="time">{{flight.start_time}}</div>
-            <div class="source">{{flight.source}}</div>
+            <div class="destination">{{flight.source}}</div>
           </div>
           <div class="side2">---------------------------------------</div>
           <div class="side3">
