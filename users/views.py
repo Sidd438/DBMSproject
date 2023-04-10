@@ -15,7 +15,7 @@ def reqistration(request):
         name = request.POST["name"]
         password = request.POST["password"]
         dob = request.POST["date"]
-        user = User.objects.create(email=email, password=password, name=name, date_of_birth=dob)
+        user = User.objects.create(email=email, name=name, password=password, date_of_birth=dob)
         user.save()
         return redirect("login")
     return render(request, "registration.html")

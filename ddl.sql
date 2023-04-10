@@ -1,4 +1,4 @@
-create database ticketBook IF NOT EXISTS;
+create database ticketBook;
 use ticketBook;
 CREATE TABLE `django_session` (`session_key` varchar(40) NOT NULL PRIMARY KEY, `session_data` longtext NOT NULL, `expire_date` datetime(6) NOT NULL);
 CREATE INDEX `django_session_expire_date_a5c62663` ON `django_session` (`expire_date`);
@@ -15,7 +15,7 @@ ALTER TABLE `auth_group_permissions` ADD CONSTRAINT `auth_group_permissio_permis
 --
 -- Create model Passenger
 --
-CREATE TABLE `passengers` (`last_login` datetime(6) NULL, `is_superuser` bool NOT NULL, `first_name` varchar(150) NOT NULL, `last_name` varchar(150) NOT NULL, `is_staff` bool NOT NULL, `is_active` bool NOT NULL, `date_joined` datetime(6) NOT NULL, `password` varchar(100) NOT NULL, `email` varchar(254) NOT NULL PRIMARY KEY, `date_of_birth` date NULL, `gender` varchar(2) NOT NULL, `name` varchar(100) NOT NULL);
+CREATE TABLE `passengers` (`password` varchar(100) NOT NULL, `email` varchar(254) NOT NULL PRIMARY KEY, `date_of_birth` date NULL, `name` varchar(100) NOT NULL);
 CREATE TABLE `passengers_groups` (`id` bigint AUTO_INCREMENT NOT NULL PRIMARY KEY, `passenger_id` varchar(254) NOT NULL, `group_id` integer NOT NULL);
 CREATE TABLE `passengers_user_permissions` (`id` bigint AUTO_INCREMENT NOT NULL PRIMARY KEY, `passenger_id` varchar(254) NOT NULL, `permission_id` integer NOT NULL);
 --
@@ -84,3 +84,19 @@ insert into seats (name, flight_id, price, seat_type) values ('B2', 2, 2000, "Bu
 insert into seats (name, flight_id, price, seat_type) values ('B3', 2, 2000, "Business");
 insert into seats (name, flight_id, price, seat_type) values ('B4', 2, 2000, "Business");
 insert into seats (name, flight_id, price, seat_type) values ('B5', 2, 2000, "Business");
+drop procedure insert_booking;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE
+`insert_booking`(IN seat_id_var int, IN user_id_var varchar(254))
+ MODIFIES SQL DATA
+ SQL SECURITY INVOKER
+BEGIN
+start transaction;
+set @check = (select count(*) from bookings where seat_id = seat_id_var and status != 'Cancelled');
+IF @check < 1
+THEN insert into bookings (seat_id, user_id, status, created_at) values (seat_id_var, user_id_var, 'Pending', NOW()); insert into sms (recepient_id, body, created_at) values (user_id_var, 'Your booking is pending', NOW()); insert into emails (recepient_id, subject, body, created_at) values (user_id_var, 'Booking Pending', 'Your booking is pending', NOW());
+ELSE insert into sms (recepient_id, body, created_at) values (user_id_var, 'Your booking is failed', NOW()); insert into emails (recepient_id, subject, message, created_at) values (user_id_var, 'Booking Failed', 'Your booking is failed', NOW());
+END IF;
+commit;
+END$$

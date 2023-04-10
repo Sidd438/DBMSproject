@@ -161,17 +161,16 @@ def GetSeatListView(request):
     if request.method=="POST":
         seat = Seat.objects.raw(f"select * from seats where seat_id = {request.POST.get('seat_id')}")[0]
         cursor = connection.cursor()
-        cursor.execute("begin;")
         booking = Booking.objects.raw(f"select * from bookings where seat_id = {seat.pk} and status != 'Completed' and status != 'Cancelled' for update ")
         if booking:
             already=True
-            cursor.execute("rollback;")
         else:
-            cursor.execute(f"insert into bookings (seat_id, user_id, status, created_at) values ({seat.pk}, '{request.user.pk}', 'Pending', NOW())")
-            cursor.execute("commit;")
-            send_mail(subject="Booking Created", message=f"Your booking for seat {seat.name} has been created", from_email=settings.EMAIL_HOST_USER, recipient_list=[request.user.email], fail_silently=True)
-            cursor.execute("insert into emails (recepient_id, subject, body, created_at) values (%s, %s, %s, NOW())", [request.user.pk, "Booking Created", f"Your booking for seat {seat.name} has been created"])
-            cursor.execute("insert into sms(recepient_id, body, created_at) values (%s, %s, NOW())", [request.user.pk, f"Your booking for seat {seat.name} has been created)"])
+            try:
+                cursor.execute(f"call insert_booking({seat.pk}, '{request.user.pk}')")
+            except Exception as e:
+                already = True
+            # cursor.execute("insert into emails (recepient_id, subject, body, created_at) values (%s, %s, %s, NOW())", [request.user.pk, "Booking Created", f"Your booking for seat {seat.name} has been created"])
+            # cursor.execute("insert into sms(recepient_id, body, created_at) values (%s, %s, NOW())", [request.user.pk, f"Your booking for seat {seat.name} has been created)"])
         flight = Flight.objects.raw(f"select * from flights where flight_id = {request.POST.get('flight_id')}")[0]
     else:
         flight = Flight.objects.raw(f"select * from flights where flight_id = {request.GET.get('flight_id')}")[0]

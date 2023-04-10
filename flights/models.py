@@ -13,8 +13,6 @@ class CustomUserManager(BaseUserManager):
             raise ValueError('Users must have an password address')
 
         email = self.normalize_email(email)
-        extra_fields.setdefault('is_staff', False)
-        extra_fields.setdefault('is_superuser', False)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save()
@@ -23,8 +21,8 @@ class CustomUserManager(BaseUserManager):
 
     def create_superuser(self, email, password, **extra_fields):
         email = self.normalize_email(email)
-        extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_staff', True)
+        # extra_fields.setdefault('is_superuser', True)
+        # extra_fields.setdefault('is_staff', True)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save()
@@ -40,7 +38,14 @@ class Passenger(AbstractUser):
         ('NB','Non-Binary')
     )
     username=None
-    is_superuser = None
+    is_superuser=None
+    is_staff=None
+    is_active=None
+    gender = None
+    first_name = None
+    last_name = None
+    date_joined = None
+    last_login = None
     password = models.CharField(max_length=100)
     email = models.EmailField(_('email address'), primary_key=True)
     date_of_birth = models.DateField(blank=True,null=True)
