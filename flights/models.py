@@ -13,8 +13,6 @@ class CustomUserManager(BaseUserManager):
             raise ValueError('Users must have an password address')
 
         email = self.normalize_email(email)
-        extra_fields.setdefault('is_staff', False)
-        extra_fields.setdefault('is_superuser', False)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save()
@@ -23,8 +21,8 @@ class CustomUserManager(BaseUserManager):
 
     def create_superuser(self, email, password, **extra_fields):
         email = self.normalize_email(email)
-        extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_staff', True)
+        # extra_fields.setdefault('is_superuser', True)
+        # extra_fields.setdefault('is_staff', True)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save()
@@ -40,13 +38,18 @@ class Passenger(AbstractUser):
         ('NB','Non-Binary')
     )
     username=None
+    is_superuser=None
+    is_staff=None
+    is_active=None
+    gender = None
+    first_name = None
+    last_name = None
+    date_joined = None
+    last_login = None
     password = models.CharField(max_length=100)
     email = models.EmailField(_('email address'), primary_key=True)
     date_of_birth = models.DateField(blank=True,null=True)
-    gender = models.CharField(_('gender'),max_length=2, choices=GENDER_CHOICES)
     name = models.CharField(max_length=100)
-    expense = models.IntegerField(default=0)
-    is_superuser = models.BooleanField(_('superuser status'),default=False)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
     objects = CustomUserManager()
@@ -71,7 +74,6 @@ class Flight(models.Model):
     name = models.CharField(max_length=100)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    price = models.IntegerField()
     source = models.CharField(max_length=100)
     destination = models.CharField(max_length=100)
 
@@ -80,15 +82,21 @@ class Flight(models.Model):
         return self.name +" " + self.source + "---" + self.destination
     
     class Meta:
-        unique_together = ["start_time", "end_time", "source", "destination"]
         db_table = "flights"
-    
+
+SEAT_TYPE_CHOICES = [
+    ("Economy", "Economy"),
+    ("Business", "Business"),
+]
 
 
 class Seat(models.Model):
     seat_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     flight = models.ForeignKey(Flight, on_delete=models.CASCADE, related_name="seats")
+    price = models.IntegerField()
+    seat_type = models.CharField(max_length=100, choices=SEAT_TYPE_CHOICES)
+
 
     class Meta:
         unique_together = ["name", "flight"]
