@@ -82,8 +82,29 @@ input[type="submit"]{
     align-items: center;
     /* justify-content: center; */
 }
-.s3{
+/* .s3{
     width:7%;
+    color:red !important;
+    background-color: rgba(255, 255, 255, 0.5); 
+    box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.5); 
+    border-radius: 10px; 
+    opacity: 0.8; 
+    padding: 5px; 
+    border: 1px solid red;
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+} */
+.s3{
+    background-color: transparent;
+    border:0px solid black;
+    color:red;
+}
+.hey{
+    /* width:7%; */
     color:red !important;
     background-color: rgba(255, 255, 255, 0.5); 
     box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.5); 
@@ -97,6 +118,7 @@ input[type="submit"]{
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 10px 20px;
 }
 .p1{
     margin-right: 20px;
@@ -149,23 +171,22 @@ input[type="submit"]{
     margin-bottom:40px ;
 }
 .search1{
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-top: 50px;
+    margin-bottom: 50px;
     margin-left:20px;
     font-family: 'Roboto';
 }
 .search2{
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-top: 50px;
+    margin-bottom: 50px;
     margin-left:20px;
     font-family: 'Roboto';
 }
 .search3{
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-top: 50px;
+    margin-bottom: 50px;
     margin-left:20px;
     font-family: 'Roboto';
-    margin-bottom: 50px;
 }
 input[type="text"]{
     border-left:0px solid black;
@@ -183,3 +204,17 @@ input[type="date"]{
     margin-left: 40px;
     /* width:90%; */
 }
+.destination{
+    margin-left:20px;
+    font-family: "roboto";
+}
+.s3{
+    color:red;
+}
+.date{
+    margin-bottom: 50px;
+}
+a{
+    text-decoration: none !important;
+}
+

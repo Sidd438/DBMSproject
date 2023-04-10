@@ -10,13 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 # import pymysql
+from ticketBook import keyconfig as senv
 import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-from ticketBook import keyconfig as senv
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'django_extensions',
     'flights',
     'users',
 ]
@@ -53,11 +53,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-AUTH_USER_MODEL='flights.Passenger'
+AUTH_USER_MODEL = 'flights.Passenger'
 SITE_ID = 1
 
 ROOT_URLCONF = 'ticketBook.urls'
-
+GRAPH_MODELS = {
+    'all_applications': True,
+    'graph_models': True,
+}
 
 TEMPLATES = [
     {
@@ -101,7 +104,7 @@ DATABASES = {
 #         'NAME': 'mydatabase',
 #     }
 # }
-#end
+# end
 
 # DATABASES = {
 #     'default': {

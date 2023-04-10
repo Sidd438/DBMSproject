@@ -1,3 +1,3 @@
 DATABASE_USER="root"
-DATABASE_PASSWORD="toor"
+DATABASE_PASSWORD="deepakkalra"
 DATABASE_NAME="ticketBook"

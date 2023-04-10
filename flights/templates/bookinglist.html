@@ -39,18 +39,23 @@
           <button class="p4">Mails Sent</button>
         </a>
       </div>
-      <a href="/users/login/">
+      <a href="/users/login/" class="hey">
       <button class="s3">Logout</button>
       </a>
     </div>
-    <div class="heads">Seats Booked By You</div>
+    
+    <div class="majordiv">
+      <div class="heads">Seats Booked By You</div>
     {% for booking in data %}
-    <h5 class="vbook">{{ booking.seat }}--{{ booking.status }}</h5>
+      <div class="fine">
+        <h5 class="vbook">{{ booking.seat }}--{{ booking.status }}</h5>
     <form method="get" action={% url 'bookingView' %}>
         <input type="hidden" name="booking_id" value="{{ booking.id }}"/>
-        <button type="submit" class="btn btn-primary">View</button>
+        <button type="submit" class="but">View</button>
     </form>
+      </div>
     {% endfor %}
+    </div>
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->

@@ -26,7 +26,7 @@
       </div>
       <div class="s2">
         <a href="/flights/">
-          <button class="p1" >Flights</button>
+          <button class="p1">Flights</button>
         </a>
         <a href="/flights/bookings/">
           <button class="p2">Your Bookings</button>
@@ -38,8 +38,8 @@
           <button class="p4">Mails Sent</button>
         </a>
       </div>
-      <a href="/users/login/">
-      <button class="s3">Logout</button>
+      <a href="/users/login/" class="hey">
+        <button class="s3">Logout</button>
       </a>
     </div>
     <div class="searchbox">
@@ -51,18 +51,19 @@
               <label for="source">Source</label>
               <input type="text" name="source" id="source" />
             </div>
-            <div class="destination">
-              <label for="destination">destination</label>
-              <input type="text" name="destination" id="destination" />
+          </div>
+
+          <div class="destination">
+            <label for="destination">Destination</label>
+            <input type="text" name="destination" id="destination" />
+          </div>
+          <div class="search2">
+            <div class="date">
+              <label for="date">Date</label>
+              <input type="date" name="date" id="date" />
             </div>
-            <div class="search2">
-              <div class="date">
-                <label for="date">Date</label>
-                <input type="date" name="date" id="date" />
-              </div>
-              <div class="searchbutton">
-                <center><input type="submit" value="Search" /></center>
-              </div>
+            <div class="searchbutton">
+              <center><input type="submit" value="Search" /></center>
             </div>
           </div>
           <div class="search2">
@@ -76,8 +77,8 @@
                 placeholder="enter the date of travel"
               />
             </div>
-            {% endcomment %}
-          {% comment %} </div>
+            {% endcomment %} {% comment %}
+          </div>
           <div class="search3">
             <div class="destination">
               <label for="destination">Destination</label>
@@ -94,7 +95,8 @@
           </div>
         </div>
       </form>
-    </div> {% endcomment %}
+    </div>
+    {% endcomment %}
     <!-- {% for flight in data %}
     <form method="get" action="seats/">
       <input type="hidden" name="flight_id" value="{{flight.id}}" />

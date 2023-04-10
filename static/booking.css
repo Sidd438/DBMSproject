@@ -90,7 +90,7 @@ input[value="Cancel Booking"]{
     /* justify-content: center; */
 }
 .s3{
-    width:7%;
+    /* width:7%; */
     color:red !important;
     background-color: rgba(255, 255, 255, 0.5); 
     box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.5); 
@@ -104,6 +104,7 @@ input[value="Cancel Booking"]{
     display: flex;
     align-items: center;
     justify-content: center;
+    padding:10px 20px;
 }
 .p1{
     margin-right: 20px;
@@ -144,4 +145,13 @@ input[value="Cancel Booking"]{
     border:0px solid black;
     color:white;
     font-size: 18px;
+}
+.s3{
+    /* background-color: transparent; */
+    /* border:0px solid black; */
+    color:red;
+}
+
+a{
+    text-decoration: none !important;
 }
