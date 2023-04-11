@@ -20,7 +20,7 @@ select * from seats where exists (select * from bookings where bookings.seat_id 
 update bookings set status='Cancelled' where booking_id=1;
 
 -- 8
-insert into passengers ("email", "password", "name", "date_of_birth") values ("c@gmail.com", "c", "c", "1999-12-12");
+insert into passengers (email, password, name, date_of_birth) values ("c@gmail.com", "c", "c", "1999-12-12");
 
 -- 9
 select count(*) from seats where flight_id=1 and where seat_type="Business" and not exists (select * from bookings where bookings.seat_id = seats.seat_id and not bookings.status='Cancelled');

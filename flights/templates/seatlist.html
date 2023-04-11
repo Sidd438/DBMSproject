@@ -44,6 +44,8 @@
       <h1>Seat Already Booked</h1>
     </div>
     {% endif %}
+    <h3>Seats available in Economy -- {{economy_c}}</h3>
+    <h3>Seats available in Business -- {{business_c}}</h3>
     <div class="heading">Seats Available</div>
     <div class="majordiv">
       {% for seat in data %} {%if seat.is_booked %} {% if seat.booked_by_you %}
@@ -84,6 +86,11 @@
         </form>
       </div>
       {% endif %} {% endfor %}
+      <form action="." method="get">
+          <input type="hidden" name="available" value="n" />
+          <input type="hidden" name="flight_id" value="{{flight_id}}" />
+          <input type="submit" value="See Available Seats" />
+        </form>
     </div>
     <!-- Optional JavaScript; choose one of the two! -->
 

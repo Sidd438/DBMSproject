@@ -37,7 +37,7 @@ CREATE TABLE `sms` (`sms_id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `body`
 --
 -- Create model Seat
 --
-CREATE TABLE `seats` (`seat_id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `name` varchar(100) NOT NULL, `price` integer NOT NULL, `seat_type` varchar(100) NOT NULL, `flight_id` integer NOT NULL);
+CREATE TABLE `seats` (`seat_id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `seat_type` varchar(100) NOT NULL, `flight_id` integer NOT NULL);
 --
 -- Create model Email
 --
@@ -58,33 +58,55 @@ ALTER TABLE `passengers_user_permissions` ADD CONSTRAINT `passengers_user_perm_p
 ALTER TABLE `passengers_user_permissions` ADD CONSTRAINT `passengers_user_perm_permission_id_8d4b1bf7_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`);
 ALTER TABLE `cancellations` ADD CONSTRAINT `cancellations_booking_id_a4cfa381_fk_bookings_booking_id` FOREIGN KEY (`booking_id`) REFERENCES `bookings` (`booking_id`);
 ALTER TABLE `sms` ADD CONSTRAINT `sms_recepient_id_65c69568_fk_passengers_email` FOREIGN KEY (`recepient_id`) REFERENCES `passengers` (`email`);
-ALTER TABLE `seats` ADD CONSTRAINT `seats_name_flight_id_5d48340a_uniq` UNIQUE (`name`, `flight_id`);
 ALTER TABLE `seats` ADD CONSTRAINT `seats_flight_id_e61b3bde_fk_flights_flight_id` FOREIGN KEY (`flight_id`) REFERENCES `flights` (`flight_id`);
 ALTER TABLE `emails` ADD CONSTRAINT `emails_recepient_id_88069420_fk_passengers_email` FOREIGN KEY (`recepient_id`) REFERENCES `passengers` (`email`);
 
-insert into flights (name, start_time, end_time, source, destination) values ('Flight 1', '2020-01-01 00:00:00', '2020-01-01 00:00:00', 'HCM', 'Hanoi');
-insert into flights (flight_id,name, start_time, end_time, source, destination) values (2,'Flight 2', '2020-01-01 00:00:00', '2020-01-01 00:00:00', 'Delhi', 'Bombay');
-insert into seats (name, flight_id, price, seat_type) values ('A1', 1, 1000, "Economy");
-insert into seats (name, flight_id, price, seat_type) values ('A2', 1, 1000, "Economy");
-insert into seats (name, flight_id, price, seat_type) values ('A3', 1, 1000, "Economy");
-insert into seats (name, flight_id, price, seat_type) values ('A4', 1, 1000, "Economy");
-insert into seats (name, flight_id, price, seat_type) values ('A5', 1, 1000, "Economy");
-insert into seats (name, flight_id, price, seat_type) values ('B1', 1, 2000, "Buisness");
-insert into seats (name, flight_id, price, seat_type) values ('B2', 1, 2000, "Buisness");
-insert into seats (name, flight_id, price, seat_type) values ('B3', 1, 2000, "Buisness");
-insert into seats (name, flight_id, price, seat_type) values ('B4', 1, 2000, "Buisness");
-insert into seats (name, flight_id, price, seat_type) values ('B5', 1, 2000, "Buisness");
-insert into seats (name, flight_id, price, seat_type) values ('A1', 2, 1000, "Economy");
-insert into seats (name, flight_id, price, seat_type) values ('A2', 2, 1000, "Economy");
-insert into seats (name, flight_id, price, seat_type) values ('A3', 2, 1000, "Economy");
-insert into seats (name, flight_id, price, seat_type) values ('A4', 2, 1000, "Economy");
-insert into seats (name, flight_id, price, seat_type) values ('A5', 2, 1000, "Economy");
-insert into seats (name, flight_id, price, seat_type) values ('B1', 2, 2000, "Business");
-insert into seats (name, flight_id, price, seat_type) values ('B2', 2, 2000, "Business");
-insert into seats (name, flight_id, price, seat_type) values ('B3', 2, 2000, "Business");
-insert into seats (name, flight_id, price, seat_type) values ('B4', 2, 2000, "Business");
-insert into seats (name, flight_id, price, seat_type) values ('B5', 2, 2000, "Business");
-drop procedure insert_booking;
+
+CREATE TABLE `price` (
+    `flight_id` integer NOT NULL,
+    `seat_type` varchar(100) NOT NULL,
+    `cost` integer NOT NULL,
+    PRIMARY KEY ("flight_id", "seat_type"),
+)
+insert into flights (name, start_time, end_time, source, destination) values ('Flight 1', '2019-01-01 00:00:00', '2019-01-01 00:00:00', 'Delhi', 'Mumbai');
+insert into flights (name, start_time, end_time, source, destination) values ('Flight 2', '2019-01-01 00:00:00', '2019-01-01 00:00:00', 'Mumbai', 'Delhi');
+insert into price(flight_id, seat_type, cost) values (1, "Economy", 1000);
+insert into price(flight_id, seat_type, cost) values (1, "Business", 2000);
+insert into price(flight_id, seat_type, cost) values (2, "Economy", 2000);
+insert into price(flight_id, seat_type, cost) values (2, "Business", 3000);
+insert into seats (flight_id, seat_type) values (1, "Economy");
+insert into seats (flight_id, seat_type) values (1, "Economy");
+insert into seats (flight_id, seat_type) values (1, "Economy");
+insert into seats (flight_id, seat_type) values (1, "Economy");
+insert into seats (flight_id, seat_type) values (1, "Economy");
+insert into seats (flight_id, seat_type) values (1, "Economy");
+insert into seats (flight_id, seat_type) values (1, "Economy");
+insert into seats (flight_id, seat_type) values (1, "Economy");
+insert into seats (flight_id, seat_type) values (1, "Business");
+insert into seats (flight_id, seat_type) values (1, "Business");
+insert into seats (flight_id, seat_type) values (1, "Business");
+insert into seats (flight_id, seat_type) values (1, "Business");
+insert into seats (flight_id, seat_type) values (1, "Business");
+insert into seats (flight_id, seat_type) values (1, "Business");
+insert into seats (flight_id, seat_type) values (1, "Business");
+insert into seats (flight_id, seat_type) values (1, "Business");
+insert into seats (flight_id, seat_type) values (2, "Economy");
+insert into seats (flight_id, seat_type) values (2, "Economy");
+insert into seats (flight_id, seat_type) values (2, "Economy");
+insert into seats (flight_id, seat_type) values (2, "Economy");
+insert into seats (flight_id, seat_type) values (2, "Economy");
+insert into seats (flight_id, seat_type) values (2, "Economy");
+insert into seats (flight_id, seat_type) values (2, "Economy");
+insert into seats (flight_id, seat_type) values (2, "Economy");
+insert into seats (flight_id, seat_type) values (2, "Business");
+insert into seats (flight_id, seat_type) values (2, "Business");
+insert into seats (flight_id, seat_type) values (2, "Business");
+insert into seats (flight_id, seat_type) values (2, "Business");
+insert into seats (flight_id, seat_type) values (2, "Business");
+insert into seats (flight_id, seat_type) values (2, "Business");
+insert into seats (flight_id, seat_type) values (2, "Business");
+insert into seats (flight_id, seat_type) values (2, "Business");
+drop procedure if exists insert_booking;
 
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE
@@ -93,10 +115,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE
  SQL SECURITY INVOKER
 BEGIN
 start transaction;
+set @seat_name = (select concat(seat_type, " ", seat_id%8) from seats where seat_id = seat_id_var); 
 set @check = (select count(*) from bookings where seat_id = seat_id_var and status != 'Cancelled');
 IF @check < 1
-THEN insert into bookings (seat_id, user_id, status, created_at) values (seat_id_var, user_id_var, 'Pending', NOW()); insert into sms (recepient_id, body, created_at) values (user_id_var, 'Your booking is pending', NOW()); insert into emails (recepient_id, subject, body, created_at) values (user_id_var, 'Booking Pending', 'Your booking is pending', NOW());
-ELSE insert into sms (recepient_id, body, created_at) values (user_id_var, 'Your booking is failed', NOW()); insert into emails (recepient_id, subject, message, created_at) values (user_id_var, 'Booking Failed', 'Your booking is failed', NOW());
+THEN insert into bookings (seat_id, user_id, status, created_at) values (seat_id_var, user_id_var, 'Pending', NOW()); insert into sms (recepient_id, body, created_at) values (user_id_var, concat('Your booking is pending for ', @seat_name), NOW()); insert into emails (recepient_id, subject, body, created_at) values (user_id_var, 'Booking Pending', concat('Your booking is pending for ', @seat_name), NOW());
+ELSE insert into sms (recepient_id, body, created_at) values (user_id_var, 'Your booking has failed', NOW()); insert into emails (recepient_id, subject, message, created_at) values (user_id_var, 'Booking Failed', 'Your booking has failed', NOW());
 END IF;
 commit;
 END$$
