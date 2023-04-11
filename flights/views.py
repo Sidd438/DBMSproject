@@ -13,13 +13,20 @@ from django.core.mail import send_mail
 def get_flight_data(queryset):
     data = []
     for flight in queryset:
+        cursor = connection.cursor()
+        cursor.execute("select cost from price where seat_type = 'Economy' and flight_id=%s", [flight.pk])
+        ecomony = cursor.fetchone()[0]
+        cursor.execute("select cost from price where seat_type = 'Business' and flight_id=%s", [flight.pk])
+        business = cursor.fetchone()[0]
         data_small = {
-            "id":flight.pk,
+            "flight_id":flight.pk,
             "name":flight.name,
             "source":flight.source,
             "destination":flight.destination,
             "start_time":flight.start_time,
             "end_time":flight.end_time,
+            "economy":ecomony,
+            "business":business,
         }
         data.append(data_small)
     return data
@@ -93,7 +100,7 @@ def get_cancellation_data(queryset):
         data_small = {
             "booking_id":cancellation.booking.pk,
             "created_at":cancellation.created_at,
-            "seat":seat.name,
+            "seat":seat.seat_type + " " + str(seat.pk%8),
             "flight":flight.name,
             "reason":cancellation.reason,
 
@@ -145,7 +152,7 @@ def FlightListView(request):
     flights = Flight.objects.raw(query)
     if not request.user.is_authenticated:
         return redirect("login")
-    return render(request, "flightlist.html", context={"data":flights, "destination":request.GET.get('destination'), "source":request.GET.get('source')})
+    return render(request, "flightlist.html", context={"data":get_flight_data(flights), "destination":request.GET.get('destination'), "source":request.GET.get('source')})
 
 
 def SearchFlightView(request):
@@ -179,6 +186,7 @@ def GetSeatListView(request):
             try:
                 cursor.execute(f"call insert_booking({seat.pk}, '{request.user.pk}')")
             except Exception as e:
+                print(e)
                 already = True
             # cursor.execute("insert into emails (recepient_id, subject, body, created_at) values (%s, %s, %s, NOW())", [request.user.pk, "Booking Created", f"Your booking for seat {seat.name} has been created"])
             # cursor.execute("insert into sms(recepient_id, body, created_at) values (%s, %s, NOW())", [request.user.pk, f"Your booking for seat {seat.name} has been created)"])
@@ -229,13 +237,13 @@ def CancellationListView(request):
 def EmailListView(request):
     if not request.user.is_authenticated:
         return redirect("login")
-    emails = Email.objects.raw(f"select * from emails where recepient_id = '{request.user.pk}'")
+    emails = Email.objects.raw(f"select * from emails where recepient_id = '{request.user.pk}' order by created_at desc")
     return render(request, "emails.html", context={"data":get_email_data(emails)})
 
 def SmsListView(request):
     if not request.user.is_authenticated:
         return redirect("login")
-    sms = SMS.objects.raw(f"select * from sms where recepient_id = '{request.user.pk}'")
+    sms = SMS.objects.raw(f"select * from sms where recepient_id = '{request.user.pk}' order by created_at desc")
     return render(request, "sms.html", context={"data":get_sms_data(sms)})
 
 # def GetBookingView(request):
