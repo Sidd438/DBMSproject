@@ -28,7 +28,7 @@
       </div>
       <div class="s2">
         <a href="/flights/">
-          <button class="p1" >Flights</button>
+          <button class="p1">Flights</button>
         </a>
         <a href="/flights/bookings/">
           <button class="p2">Your Bookings</button>
@@ -41,7 +41,7 @@
         </a>
       </div>
       <a href="/users/login/" class="hey">
-      <button class="s3">Logout</button>
+        <button class="s3">Logout</button>
       </a>
     </div>
     {% for flight in data %}
@@ -49,19 +49,19 @@
       <input type="hidden" name="flight_id" value="{{flight.flight_id}}" />
       <div class="flightbox">
         <div class="box1">{{flight.name}}</div>
-        <div class="box1">economy -- {{flight.economy}}</div>
-        <div class="box1">business -- {{flight.business}}</div>
         <div class="box2">
           <div class="side1">
             <div class="time">{{flight.start_time}}</div>
             <div class="source">{{flight.source}}</div>
           </div>
-          <div class="side2">---------------------------------------</div>
+          <div class="side2">---------------------------------</div>
           <div class="side3">
             <div class="end_time">{{flight.end_time}}</div>
             <div class="destination">{{flight.destination}}</div>
           </div>
         </div>
+        <div class="box3" id="special">Economy -- {{flight.economy}}</div>
+        <div class="box3">Business -- {{flight.business}}</div>
         <div class="box4">
           <input type="submit" value="Book Seats" />
         </div>

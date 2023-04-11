@@ -46,7 +46,8 @@
     
     <div class="majordiv">
       <div class="heads">Seats Booked By You</div>
-      <h1>Total Expense -- {{expense}}</h1>
+      <div class="good">Total Expense -- {{expense}}</div>
+        <hr/>
     {% for booking in data %}
       <div class="fine">
         <h5 class="vbook">{{ booking.seat }}--{{ booking.status }}</h5>
