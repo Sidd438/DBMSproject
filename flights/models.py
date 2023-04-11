@@ -94,7 +94,6 @@ class Seat(models.Model):
     seat_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     flight = models.ForeignKey(Flight, on_delete=models.CASCADE, related_name="seats")
-    price = models.IntegerField()
     seat_type = models.CharField(max_length=100, choices=SEAT_TYPE_CHOICES)
 
 

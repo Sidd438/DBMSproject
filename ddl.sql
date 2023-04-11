@@ -37,7 +37,7 @@ CREATE TABLE `sms` (`sms_id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `body`
 --
 -- Create model Seat
 --
-CREATE TABLE `seats` (`seat_id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `name` varchar(100) NOT NULL, `price` integer NOT NULL, `seat_type` varchar(100) NOT NULL, `flight_id` integer NOT NULL);
+CREATE TABLE `seats` (`seat_id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `name` varchar(100) NOT NULL, `seat_type` varchar(100) NOT NULL, `flight_id` integer NOT NULL);
 --
 -- Create model Email
 --
@@ -49,42 +49,53 @@ ALTER TABLE `bookings` ADD COLUMN `seat_id` integer NOT NULL , ADD CONSTRAINT `b
 --
 -- Add field user to booking
 --
-ALTER TABLE `bookings` ADD COLUMN `user_id` varchar(254) NOT NULL , ADD CONSTRAINT `bookings_user_id_6e734b08_fk_passengers_email` FOREIGN KEY (`user_id`) REFERENCES `passengers`(`email`) ON DELETE CASCADE;
-ALTER TABLE `passengers_groups` ADD CONSTRAINT `passengers_groups_passenger_id_group_id_a079617a_uniq` UNIQUE (`passenger_id`, `group_id`) ;
-ALTER TABLE `passengers_groups` ADD CONSTRAINT `passengers_groups_passenger_id_b4628fce_fk_passengers_email` FOREIGN KEY (`passenger_id`) REFERENCES `passengers` (`email`) ON DELETE CASCADE;
-ALTER TABLE `passengers_groups` ADD CONSTRAINT `passengers_groups_group_id_b8a400c5_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`) ON DELETE CASCADE;
+ALTER TABLE `bookings` ADD COLUMN `user_id` varchar(254) NOT NULL , ADD CONSTRAINT `bookings_user_id_6e734b08_fk_passengers_email` FOREIGN KEY (`user_id`) REFERENCES `passengers`(`email`);
+ALTER TABLE `passengers_groups` ADD CONSTRAINT `passengers_groups_passenger_id_group_id_a079617a_uniq` UNIQUE (`passenger_id`, `group_id`);
+ALTER TABLE `passengers_groups` ADD CONSTRAINT `passengers_groups_passenger_id_b4628fce_fk_passengers_email` FOREIGN KEY (`passenger_id`) REFERENCES `passengers` (`email`);
+ALTER TABLE `passengers_groups` ADD CONSTRAINT `passengers_groups_group_id_b8a400c5_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`);
 ALTER TABLE `passengers_user_permissions` ADD CONSTRAINT `passengers_user_permissi_passenger_id_permission__25761e5b_uniq` UNIQUE (`passenger_id`, `permission_id`);
-ALTER TABLE `passengers_user_permissions` ADD CONSTRAINT `passengers_user_perm_passenger_id_626f4e15_fk_passenger` FOREIGN KEY (`passenger_id`) REFERENCES `passengers` (`email`) ON DELETE CASCADE;
+ALTER TABLE `passengers_user_permissions` ADD CONSTRAINT `passengers_user_perm_passenger_id_626f4e15_fk_passenger` FOREIGN KEY (`passenger_id`) REFERENCES `passengers` (`email`);
 ALTER TABLE `passengers_user_permissions` ADD CONSTRAINT `passengers_user_perm_permission_id_8d4b1bf7_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`);
-ALTER TABLE `cancellations` ADD CONSTRAINT `cancellations_booking_id_a4cfa381_fk_bookings_booking_id` FOREIGN KEY (`booking_id`) REFERENCES `bookings` (`booking_id`) ON DELETE CASCADE;
-ALTER TABLE `sms` ADD CONSTRAINT `sms_recepient_id_65c69568_fk_passengers_email` FOREIGN KEY (`recepient_id`) REFERENCES `passengers` (`email`) ON DELETE CASCADE;
+ALTER TABLE `cancellations` ADD CONSTRAINT `cancellations_booking_id_a4cfa381_fk_bookings_booking_id` FOREIGN KEY (`booking_id`) REFERENCES `bookings` (`booking_id`);
+ALTER TABLE `sms` ADD CONSTRAINT `sms_recepient_id_65c69568_fk_passengers_email` FOREIGN KEY (`recepient_id`) REFERENCES `passengers` (`email`);
 ALTER TABLE `seats` ADD CONSTRAINT `seats_name_flight_id_5d48340a_uniq` UNIQUE (`name`, `flight_id`);
-ALTER TABLE `seats` ADD CONSTRAINT `seats_flight_id_e61b3bde_fk_flights_flight_id` FOREIGN KEY (`flight_id`) REFERENCES `flights` (`flight_id`) ON DELETE CASCADE;
-ALTER TABLE `emails` ADD CONSTRAINT `emails_recepient_id_88069420_fk_passengers_email` FOREIGN KEY (`recepient_id`) REFERENCES `passengers` (`email`) ON DELETE CASCADE;
+ALTER TABLE `seats` ADD CONSTRAINT `seats_flight_id_e61b3bde_fk_flights_flight_id` FOREIGN KEY (`flight_id`) REFERENCES `flights` (`flight_id`);
+ALTER TABLE `emails` ADD CONSTRAINT `emails_recepient_id_88069420_fk_passengers_email` FOREIGN KEY (`recepient_id`) REFERENCES `passengers` (`email`);
 
-insert into flights (name, start_time, end_time, source, destination) values ('Flight 1', '2020-01-01 00:00:00', '2020-01-01 00:00:00', 'HCM', 'Hanoi');
-insert into flights (flight_id,name, start_time, end_time, source, destination) values (2,'Flight 2', '2020-01-01 00:00:00', '2020-01-01 00:00:00', 'Delhi', 'Bombay');
-insert into seats (name, flight_id, price, seat_type) values ('A1', 1, 1000, "Economy");
-insert into seats (name, flight_id, price, seat_type) values ('A2', 1, 1000, "Economy");
-insert into seats (name, flight_id, price, seat_type) values ('A3', 1, 1000, "Economy");
-insert into seats (name, flight_id, price, seat_type) values ('A4', 1, 1000, "Economy");
-insert into seats (name, flight_id, price, seat_type) values ('A5', 1, 1000, "Economy");
-insert into seats (name, flight_id, price, seat_type) values ('B1', 1, 2000, "Buisness");
-insert into seats (name, flight_id, price, seat_type) values ('B2', 1, 2000, "Buisness");
-insert into seats (name, flight_id, price, seat_type) values ('B3', 1, 2000, "Buisness");
-insert into seats (name, flight_id, price, seat_type) values ('B4', 1, 2000, "Buisness");
-insert into seats (name, flight_id, price, seat_type) values ('B5', 1, 2000, "Buisness");
-insert into seats (name, flight_id, price, seat_type) values ('A1', 2, 1000, "Economy");
-insert into seats (name, flight_id, price, seat_type) values ('A2', 2, 1000, "Economy");
-insert into seats (name, flight_id, price, seat_type) values ('A3', 2, 1000, "Economy");
-insert into seats (name, flight_id, price, seat_type) values ('A4', 2, 1000, "Economy");
-insert into seats (name, flight_id, price, seat_type) values ('A5', 2, 1000, "Economy");
-insert into seats (name, flight_id, price, seat_type) values ('B1', 2, 2000, "Business");
-insert into seats (name, flight_id, price, seat_type) values ('B2', 2, 2000, "Business");
-insert into seats (name, flight_id, price, seat_type) values ('B3', 2, 2000, "Business");
-insert into seats (name, flight_id, price, seat_type) values ('B4', 2, 2000, "Business");
-insert into seats (name, flight_id, price, seat_type) values ('B5', 2, 2000, "Business");
-drop procedure insert_booking;
+
+insert into flights (name, start_time, end_time, source, destination) values ('Flight 1', '2019-01-01 00:00:00', '2019-01-01 00:00:00', 'Delhi', 'Mumbai');
+insert into flights (name, start_time, end_time, source, destination) values ('Flight 2', '2019-01-01 00:00:00', '2019-01-01 00:00:00', 'Mumbai', 'Delhi');
+insert into price(flight_id, seat_type, cost) values (1, "Economy", 1000);
+insert into price(flight_id, seat_type, cost) values (1, "Buisness", 2000);
+insert into price(flight_id, seat_type, cost) values (2, "Economy", 2000);
+insert into price(flight_id, seat_type, cost) values (2, "Buisness", 3000);
+insert into seats (name, flight_id, seat_type) values ('A1', 1, "Economy");
+insert into seats (name, flight_id, seat_type) values ('A2', 1, "Economy");
+insert into seats (name, flight_id, seat_type) values ('A3', 1, "Economy");
+insert into seats (name, flight_id, seat_type) values ('A4', 1, "Economy");
+insert into seats (name, flight_id, seat_type) values ('A5', 1, "Economy");
+insert into seats (name, flight_id, seat_type) values ('B1', 1, "Buisness");
+insert into seats (name, flight_id, seat_type) values ('B2', 1, "Buisness");
+insert into seats (name, flight_id, seat_type) values ('B3', 1, "Buisness");
+insert into seats (name, flight_id, seat_type) values ('B4', 1, "Buisness");
+insert into seats (name, flight_id, seat_type) values ('B5', 1, "Buisness");
+insert into seats (name, flight_id, seat_type) values ('A1', 2, "Economy");
+insert into seats (name, flight_id, seat_type) values ('A2', 2, "Economy");
+insert into seats (name, flight_id, seat_type) values ('A3', 2, "Economy");
+insert into seats (name, flight_id, seat_type) values ('A4', 2, "Economy");
+insert into seats (name, flight_id, seat_type) values ('A5', 2, "Economy");
+insert into seats (name, flight_id, seat_type) values ('B1', 2, "Buisness");
+insert into seats (name, flight_id, seat_type) values ('B2', 2, "Buisness");
+insert into seats (name, flight_id, seat_type) values ('B3', 2, "Buisness");
+insert into seats (name, flight_id, seat_type) values ('B4', 2, "Buisness");
+insert into seats (name, flight_id, seat_type) values ('B5', 2, "Buisness");
+CREATE TABLE 'price' (
+    "flight_id" integer NOT NULL,
+    "seat_type" varchar(100) NOT NULL,
+    "cost" integer NOT NULL,
+    PRIMARY KEY ("flight_id", "seat_type"),
+)
+drop procedure if exists insert_booking;
 
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE

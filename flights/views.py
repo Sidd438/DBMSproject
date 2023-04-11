@@ -3,7 +3,9 @@ from .models import *
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.db import connection
-#import mysql.connector 
+import mysql.connector 
+from ticketBook import keyconfig as senv
+from mysql.connector import Error, connect
 # Create your views here.
 from django.conf import settings
 from django.core.mail import send_mail
@@ -11,7 +13,6 @@ from django.core.mail import send_mail
 def get_flight_data(queryset):
     data = []
     for flight in queryset:
-        print(flight.pk, "kljn")
         data_small = {
             "id":flight.pk,
             "name":flight.name,
@@ -25,11 +26,21 @@ def get_flight_data(queryset):
 
 def get_seat_data(queryset, request=None):
     data = []
+    cursor = connection.cursor()
     for seat in queryset:
+        price = 0
+        print(seat.seat_type, seat.flight.pk)
+        cursor.execute("select cost from price where seat_type = %s and flight_id=%s", [seat.seat_type, seat.flight.pk])
+        try:
+            price = cursor.fetchone()[0]
+            if not price:
+                price = 0
+        except:
+            price =0
         data_small = {
             "id":seat.pk,
             "name":seat.name,
-            "price":seat.price,
+            "price":price,
             "type":seat.seat_type,
             "is_booked":False,
         }
@@ -192,12 +203,16 @@ def GetSeatListView(request):
 #         seat = Seat.objects.get(id=request.GET.get('seat_id'))
 #     return render(request, "booked.html", context={"data":booking.id, "already":already})
 
-
 def BookingListView(request):
     if not request.user.is_authenticated:
         return redirect("login")
     bookings = Booking.objects.raw(f"select * from bookings where user_id = '{request.user.pk}'")
-    return render(request, "bookinglist.html", context={"data":get_booking_data(bookings)})
+    cursor = connection.cursor()
+    cursor.execute(f"select sum(cost) from seats inner join price on price.seat_type=seats.seat_type and price.flight_id=seats.flight_id where seat_id in (select seat_id from bookings where user_id='{request.user.pk}' and (status='Confirmed' or status='Completed'));")    
+    expense = cursor.fetchone()[0]
+    if expense is None:
+        expense = 0
+    return render(request, "bookinglist.html", context={"data":get_booking_data(bookings), "expense":int(expense)})
 
 def CancelBookingView(request):
     if not request.user.is_authenticated:
