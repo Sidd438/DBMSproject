@@ -188,13 +188,26 @@ def GetSeatListView(request):
             except Exception as e:
                 print(e)
                 already = True
+            cursor.close()
             # cursor.execute("insert into emails (recepient_id, subject, body, created_at) values (%s, %s, %s, NOW())", [request.user.pk, "Booking Created", f"Your booking for seat {seat.name} has been created"])
             # cursor.execute("insert into sms(recepient_id, body, created_at) values (%s, %s, NOW())", [request.user.pk, f"Your booking for seat {seat.name} has been created)"])
         flight = Flight.objects.raw(f"select * from flights where flight_id = {request.POST.get('flight_id')}")[0]
     else:
         flight = Flight.objects.raw(f"select * from flights where flight_id = {request.GET.get('flight_id')}")[0]
-    seats = Seat.objects.raw(f"select * from seats where flight_id = {flight.pk}")
-    return render(request, "seatlist.html", context={"data":get_seat_data(seats, request), "flight_id":flight.pk, "already":already, "booking_id":0})
+    if request.method == "GET" and request.GET.get("available"):
+        seats = Seat.objects.raw(f"select * from seats where flight_id = {flight.pk} and seat_id not in (select seat_id from bookings where status != 'Cancelled')")
+    else:
+        seats = Seat.objects.raw(f"select * from seats where flight_id = {flight.pk}")
+    cursor = connection.cursor()
+    cursor.execute(f"select count(*) from seats where flight_id = {flight.pk} and seat_type='Economy' and seat_id not in (select seat_id from bookings where status != 'Cancelled')")
+    economy_c = cursor.fetchone()[0]
+    if not economy_c:
+        economy_c = 0
+    cursor.execute(f"select count(*) from seats where flight_id = {flight.pk} and seat_type='Business' and seat_id not in (select seat_id from bookings where status != 'Cancelled')")
+    business_c = cursor.fetchone()[0]
+    if not business_c:
+        business_c = 0
+    return render(request, "seatlist.html", context={"data":get_seat_data(seats, request), "flight_id":flight.pk, "already":already, "booking_id":0, "economy_c":economy_c, "business_c":business_c})
 
 
 # def BookSeatView(request):
