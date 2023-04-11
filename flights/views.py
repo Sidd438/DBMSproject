@@ -175,6 +175,7 @@ def GetSeatListView(request):
     if not request.user.is_authenticated:
         return redirect("login")
     already=False
+    available = False
     print(request.user, request.method)
     if request.method=="POST":
         seat = Seat.objects.raw(f"select * from seats where seat_id = {request.POST.get('seat_id')}")[0]
@@ -195,6 +196,7 @@ def GetSeatListView(request):
     else:
         flight = Flight.objects.raw(f"select * from flights where flight_id = {request.GET.get('flight_id')}")[0]
     if request.method == "GET" and request.GET.get("available"):
+        available = True
         seats = Seat.objects.raw(f"select * from seats where flight_id = {flight.pk} and seat_id not in (select seat_id from bookings where status != 'Cancelled')")
     else:
         seats = Seat.objects.raw(f"select * from seats where flight_id = {flight.pk}")
@@ -207,7 +209,7 @@ def GetSeatListView(request):
     business_c = cursor.fetchone()[0]
     if not business_c:
         business_c = 0
-    return render(request, "seatlist.html", context={"data":get_seat_data(seats, request), "flight_id":flight.pk, "already":already, "booking_id":0, "economy_c":economy_c, "business_c":business_c})
+    return render(request, "seatlist.html", context={"data":get_seat_data(seats, request), "flight_id":flight.pk, "already":already, "booking_id":0, "economy_c":economy_c, "business_c":business_c, "available":available})
 
 
 # def BookSeatView(request):

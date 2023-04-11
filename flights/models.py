@@ -132,7 +132,7 @@ class Cancellation(models.Model):
 
 class Email(models.Model):
     em_id = models.AutoField(primary_key=True)
-    recepient = models.ForeignKey(UserC, on_delete=models.CASCADE, related_name="emails")
+    recipient = models.ForeignKey(UserC, on_delete=models.CASCADE, related_name="emails")
     subject = models.CharField(max_length=100)
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -143,7 +143,7 @@ class Email(models.Model):
 
 class SMS(models.Model):
     sms_id = models.AutoField(primary_key=True)
-    recepient = models.ForeignKey(UserC, on_delete=models.CASCADE, related_name="sms")
+    recipient = models.ForeignKey(UserC, on_delete=models.CASCADE, related_name="sms")
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
