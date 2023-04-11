@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import get_user_model
+from django.db import connection
 # Create your views here.
 User = get_user_model()
 def login(request):
@@ -15,7 +16,7 @@ def reqistration(request):
         name = request.POST["name"]
         password = request.POST["password"]
         dob = request.POST["date"]
-        user = User.objects.create(email=email, name=name, password=password, date_of_birth=dob)
-        user.save()
+        cursor = connection.cursor()
+        cursor.execute("INSERT INTO passengers (email, name, password, date_of_birth) VALUES (%s, %s, %s, %s)", [email, name, password, dob])
         return redirect("login")
     return render(request, "registration.html")

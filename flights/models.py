@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
-
+from django.db import connection
 
 class CustomUserManager(BaseUserManager):
     use_in_migrations = True
@@ -92,15 +92,19 @@ SEAT_TYPE_CHOICES = [
 
 class Seat(models.Model):
     seat_id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=100)
     flight = models.ForeignKey(Flight, on_delete=models.CASCADE, related_name="seats")
-    price = models.IntegerField()
     seat_type = models.CharField(max_length=100, choices=SEAT_TYPE_CHOICES)
 
 
     class Meta:
-        unique_together = ["name", "flight"]
         db_table = "seats"
+
+    @property
+    def name(seat):
+        cursor = connection.cursor()
+        cursor.execute("SELECT COUNT(*) FROM seats WHERE flight_id = %s AND seat_type = %s", [seat.flight.flight_id, seat.seat_type])
+        n = cursor.fetchone()[0]
+        return seat.seat_type + " " + str((seat.seat_id-1)%n+1)
 
 
 
